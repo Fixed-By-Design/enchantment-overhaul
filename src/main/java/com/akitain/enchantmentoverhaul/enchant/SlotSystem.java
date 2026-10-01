@@ -1,7 +1,6 @@
 package com.akitain.enchantmentoverhaul.enchant;
 
 import com.akitain.enchantmentoverhaul.EnchantmentOverhaul;
-import com.akitain.enchantmentoverhaul.component.ModComponents;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -39,10 +38,6 @@ public class SlotSystem {
         return 0;
     }
 
-    public static int getGrindstonePenalty(ItemStack stack) {
-        return stack.getOrDefault(ModComponents.GRINDSTONE_PENALTY, 0);
-    }
-
     public static int getCurseBonus(ItemStack stack) {
         int bonus = 0;
         for (Object2IntMap.Entry<Holder<Enchantment>> entry : getEnchantments(stack).entrySet()) {
@@ -60,7 +55,7 @@ public class SlotSystem {
     }
 
     public static int getMaxSlots(ItemStack stack) {
-        return getBaseMaxSlots(stack) - getGrindstonePenalty(stack) + getCurseBonus(stack);
+        return getBaseMaxSlots(stack) + getCurseBonus(stack);
     }
 
     public static int getAvailableSlots(ItemStack stack) {

@@ -18,7 +18,7 @@ Smithing upgrades replaced them: Honing (damage), Warding (protection), Grinding
 
 ## How do I remove enchantments?
 
-Use the grindstone. The grindstone strips all enchantments from the item but permanently reduces the max slot count by 1. You restore the lost slot at the [[Anvil and Grindstone]] using the repair material and some XP.
+Use the grindstone. It strips all enchantments from the item, curses included, and the item keeps all of its slots (see [[Anvil and Grindstone]]).
 
 ## Why does gold armor have more enchantment slots than diamond?
 

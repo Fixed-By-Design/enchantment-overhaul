@@ -10,6 +10,7 @@ import net.minecraft.resources.Identifier;
 
 public final class ModComponents {
 
+    // No longer applied or read; kept registered so items saved with it still load.
     public static final DataComponentType<Integer> GRINDSTONE_PENALTY = register("grindstone_penalty");
     public static final DataComponentType<Integer> HONING_LEVEL = register("honing_level");
     public static final DataComponentType<Integer> WARDING_LEVEL = register("warding_level");

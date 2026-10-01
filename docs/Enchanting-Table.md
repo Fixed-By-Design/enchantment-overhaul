@@ -25,7 +25,7 @@ Special items: Trident/Mace/Elytra (5), Turtle Helmet (5), Crossbow (4), Bow/Fis
 - 1 level = 1 slot
 - Exception: Mending costs 3 slots
 - Curses cost 0 slots and grant +1 bonus slot each
-- The grindstone removes all enchantments but permanently reduces max slots by 1 (restorable via anvil)
+- The grindstone removes all enchantments without costing any slot
 
 ## Adding Enchantments to the Catalogue
 
@@ -55,7 +55,7 @@ Left side (3 slots): item on top, reagent beside it, result on the bottom.
 
 Right side (scrollable catalogue): each row shows the enchantment name and a level selector (I, II, III...). Hovering shows the reagent cost, XP cost, and slot cost. Unaffordable rows and level buttons appear dimmed and are not clickable.
 
-Bottom (visual slot bar): pips show used, pending, and free slots. Grindstone penalties appear as dark red broken pips at the end. Scales to fit any slot count.
+Bottom (visual slot bar): pips show used, pending, and free slots. Scales to fit any slot count.
 
 ## Cost
 
@@ -84,6 +84,4 @@ Curses cost 0 slots and grant +1 bonus slot instead. This is the primary way to 
 
 ## Grindstone
 
-Removes all enchantments but permanently reduces max slots by 1. Lost slots appear as dark red "broken" pips at the end of the slot bar. The anvil restores lost slots using the matching repair material (see [[Anvil and Grindstone]]).
-
-![Slot bar showing broken red pip from grindstone penalty](images/slot-bar-penalty.png)
+Removes all enchantments, curses included, and leaves every slot free (see [[Anvil and Grindstone]]).

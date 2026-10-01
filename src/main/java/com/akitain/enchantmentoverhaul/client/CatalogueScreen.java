@@ -69,7 +69,6 @@ public class CatalogueScreen extends AbstractContainerScreen<CatalogueMenu> {
     private static final Identifier SLOT_PENDING_ON = texture("catalogue/slot_pending_on");
     private static final Identifier SLOT_PENDING_OFF = texture("catalogue/slot_pending_off");
     private static final Identifier SLOT_FREE = texture("catalogue/slot_free");
-    private static final Identifier SLOT_PENALTY = texture("catalogue/slot_penalty");
     private static final Identifier[] EMPTY_SLOT_SPRITES = {
             Identifier.withDefaultNamespace("container/slot/sword"),
             Identifier.withDefaultNamespace("container/slot/amethyst_shard")
@@ -218,15 +217,14 @@ public class CatalogueScreen extends AbstractContainerScreen<CatalogueMenu> {
         ItemStack item = this.menu.getSlot(CatalogueMenu.ITEM_SLOT).getItem();
         if (item.isEmpty()) return;
 
-        int max = SlotSystem.getMaxSlots(item);
+        int pips = SlotSystem.getMaxSlots(item);
         int used = SlotSystem.getUsedSlots(item);
-        int pips = max + SlotSystem.getGrindstonePenalty(item);
         if (pips <= 0) return;
 
         CatalogueEntry selected = this.menu.getSelectedEntry();
         int pending = selected == null ? 0 : this.menu.slotCost(selected, this.menu.getSelectedLevel());
 
-        String count = used + "/" + max;
+        String count = used + "/" + pips;
         int left = this.leftPos + LIST_X;
         int right = left + LIST_WIDTH - this.font.width(count) - 4;
         int y = this.topPos + SLOT_BAR_Y;
@@ -237,8 +235,7 @@ public class CatalogueScreen extends AbstractContainerScreen<CatalogueMenu> {
         for (int i = 0; i < pips; i++) {
             Identifier pip = i < used ? SLOT_USED
                     : i < used + pending ? (blink ? SLOT_PENDING_ON : SLOT_PENDING_OFF)
-                    : i < max ? SLOT_FREE
-                    : SLOT_PENALTY;
+                    : SLOT_FREE;
             graphics.blit(RenderPipelines.GUI_TEXTURED, pip, left + i * (pipWidth + gap), y, 0, 0, pipWidth, PIP_HEIGHT, PIP_TEXTURE_WIDTH, PIP_HEIGHT);
         }
         graphics.text(this.font, count, right + 4, y - 1, 0xFFD8C8F0, true);

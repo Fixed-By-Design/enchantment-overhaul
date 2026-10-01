@@ -6,21 +6,16 @@ The anvil is a maintenance station. Enchantment combining has been removed. Book
 
 | Action | Status |
 |---|---|
-| Repair (material) | Works, fixed cost, no escalation |
+| Repair (material) | Works, 1 level, no escalation |
 | Rename | Works |
-| Slot restoration | Works, restores grindstone penalties |
 | Book application | Removed |
 | Item + item combining | Removed |
 | Too Expensive | Removed |
 | Prior Work Penalty | Removed |
 
-### Slot Restoration
+### Repair
 
-After a grindstone removes enchantments and applies a -1 slot penalty, the anvil restores the lost slot. Place the item in the left slot and any of its repair materials in the right slot. Restoration accepts the same materials that repair the item's durability, so anything added by tags, datapacks, or other mods works too.
-
-![Anvil restoring a grindstone penalty on a Diamond Sword](images/anvil-restore.png)
-
-Repair Materials:
+Place the item in the left slot and its repair material in the right slot. Each material restores a quarter of the item's durability, and the whole repair costs 1 XP level. Any material added by tags, datapacks, or other mods works too.
 
 | Item Material | Repair Material |
 |---|---|
@@ -34,18 +29,8 @@ Repair Materials:
 | Stone | Cobblestone |
 | Bow | String |
 
-Restoration XP Cost:
-
-| Item Material | XP Cost |
-|---|---|
-| Netherite | 10 levels |
-| Diamond | 8 levels |
-| Gold / Iron / Chainmail | 5 levels |
-| Copper | 3 levels |
-| Leather / Wood / Stone | 2 levels |
+The bow's repair material comes from the `enchantment-overhaul:repairs_bow` item tag.
 
 ## Grindstone
 
-The grindstone removes all enchantments from an item but permanently reduces the max slot count by 1. Re-enchanting becomes progressively more constrained unless you restore the slot via the anvil (see above).
-
-The penalty appears as dark red "broken" pips at the end of the [[Enchanting Table]] slot bar.
+The grindstone removes all enchantments from an item, curses included. The item keeps all of its slots, so it can be enchanted again right away.

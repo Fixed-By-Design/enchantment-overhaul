@@ -23,7 +23,7 @@ New to the mod? Start with the [[Getting Started]] guide.
 
 ## Mechanics
 
-- [[Anvil and Grindstone]]: repair, rename, slot restoration, enchantment removal
+- [[Anvil and Grindstone]]: repair, rename, enchantment removal
 - [[Mob Equipment]]: difficulty-scaled enchantments and upgrades on mob gear
 - [[Advancements]]: six custom advancements
 
