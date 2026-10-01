@@ -32,6 +32,8 @@ public enum UpgradeType {
     TEMPERING(ModComponents.TEMPERING_LEVEL),
     GRINDING(ModComponents.GRINDING_LEVEL);
 
+    public static final int MAX_LEVEL = 5;
+
     private final DataComponentType<Integer> component;
 
     UpgradeType(DataComponentType<Integer> component) {

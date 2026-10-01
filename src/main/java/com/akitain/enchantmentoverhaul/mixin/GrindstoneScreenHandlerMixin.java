@@ -1,6 +1,7 @@
 package com.akitain.enchantmentoverhaul.mixin;
 
 import com.akitain.enchantmentoverhaul.component.ModComponents;
+import com.akitain.enchantmentoverhaul.enchant.SlotSystem;
 import net.minecraft.world.inventory.GrindstoneMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -19,7 +20,6 @@ public class GrindstoneScreenHandlerMixin {
 
         EnchantmentHelper.updateEnchantments(result, components -> components.removeIf(enchantment -> true));
 
-        int penalty = result.getOrDefault(ModComponents.GRINDSTONE_PENALTY, 0);
-        result.set(ModComponents.GRINDSTONE_PENALTY, penalty + 1);
+        result.set(ModComponents.GRINDSTONE_PENALTY, SlotSystem.getGrindstonePenalty(result) + 1);
     }
 }

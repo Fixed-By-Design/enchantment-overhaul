@@ -1,14 +1,12 @@
 package com.akitain.enchantmentoverhaul.mixin.client;
 
+import com.akitain.enchantmentoverhaul.enchant.ModEnchantmentHelper;
 import com.akitain.enchantmentoverhaul.enchant.ModEnchantments;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.Avatar;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -25,13 +23,7 @@ public class VeilNametagMixin {
     private void hideVeilNametag(Avatar entity, double squaredDistance, CallbackInfoReturnable<Boolean> cir) {
         if (!cir.getReturnValue()) return;
 
-        ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
-        ItemEnchantments enchantments = helmet.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
-        boolean hasVeil = false;
-        for (var entry : enchantments.entrySet()) {
-            if (entry.getKey().is(ModEnchantments.VEIL)) { hasVeil = true; break; }
-        }
-        if (!hasVeil) return;
+        if (!ModEnchantmentHelper.hasEnchantment(ModEnchantments.VEIL, entity.getItemBySlot(EquipmentSlot.HEAD))) return;
 
         Minecraft client = Minecraft.getInstance();
         Entity camera = client.getCameraEntity();

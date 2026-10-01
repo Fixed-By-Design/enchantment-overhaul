@@ -6,26 +6,21 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 public class InnateMaterialProperties {
 
     public static final int PERCENT_PER_PIECE = 5;
-    private static final EquipmentSlot[] ARMOR_SLOTS = {
-            EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET
-    };
 
     public static float getDamageMultiplier(LivingEntity entity, DamageSource source) {
-        int pieces = 0;
-        for (EquipmentSlot slot : ARMOR_SLOTS) {
-            ItemStack stack = entity.getItemBySlot(slot);
-            if (stack.isEmpty()) continue;
-            String material = getMaterial(stack);
-            if (material != null && resists(material, source)) pieces++;
-        }
+        int pieces = HumanoidArmor.count(entity, stack -> resists(stack, source));
         return 1.0f - pieces * PERCENT_PER_PIECE / 100.0f;
+    }
+
+    private static boolean resists(ItemStack stack, DamageSource source) {
+        String material = getMaterial(stack);
+        return material != null && resists(material, source);
     }
 
     public static String getMaterial(ItemStack stack) {

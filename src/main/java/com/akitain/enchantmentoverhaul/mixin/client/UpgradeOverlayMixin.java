@@ -1,7 +1,7 @@
 package com.akitain.enchantmentoverhaul.mixin.client;
 
-import com.akitain.enchantmentoverhaul.component.ModComponents;
 import com.akitain.enchantmentoverhaul.enchant.InnateMaterialProperties;
+import com.akitain.enchantmentoverhaul.smithing.UpgradeType;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.Sheets;
@@ -51,11 +51,11 @@ public class UpgradeOverlayMixin {
 
         int order = initialOrder;
 
-        if (stack.getOrDefault(ModComponents.WARDING_LEVEL, 0) > 0) {
+        if (UpgradeType.WARDING.currentLevel(stack) > 0) {
             renderOverlay(dir + "/warding_" + material, model, state, matrices, queue, light, outlineColor, order++);
         }
 
-        if (stack.getOrDefault(ModComponents.TEMPERING_LEVEL, 0) > 0) {
+        if (UpgradeType.TEMPERING.currentLevel(stack) > 0) {
             renderOverlay(dir + "/tempering_" + material, model, state, matrices, queue, light, outlineColor, order);
         }
     }

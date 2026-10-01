@@ -1,5 +1,6 @@
 package com.akitain.enchantmentoverhaul.mixin;
 
+import com.akitain.enchantmentoverhaul.enchant.ModEnchantmentHelper;
 import com.akitain.enchantmentoverhaul.enchant.ModEnchantments;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import net.minecraft.core.component.DataComponents;
@@ -8,7 +9,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BlocksAttacks;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -48,20 +48,8 @@ public abstract class ParryMixin {
     // The window opens once the shield actually starts blocking and lasts PARRY_WINDOW_TICKS.
     @Unique
     private boolean isParrying(@Nullable ItemStack stack) {
-        if (parryLevel(stack) <= 0) return false;
+        if (stack == null || !ModEnchantmentHelper.hasEnchantment(ModEnchantments.PARRY, stack)) return false;
         BlocksAttacks blocksAttacks = stack.get(DataComponents.BLOCKS_ATTACKS);
-        if (blocksAttacks == null) return false;
-        int heldFor = getTicksUsingItem();
-        return heldFor <= blocksAttacks.blockDelayTicks() + PARRY_WINDOW_TICKS;
-    }
-
-    @Unique
-    private static int parryLevel(@Nullable ItemStack stack) {
-        if (stack == null || stack.isEmpty()) return 0;
-        ItemEnchantments enchantments = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
-        for (var entry : enchantments.entrySet()) {
-            if (entry.getKey().is(ModEnchantments.PARRY)) return entry.getIntValue();
-        }
-        return 0;
+        return blocksAttacks != null && getTicksUsingItem() <= blocksAttacks.blockDelayTicks() + PARRY_WINDOW_TICKS;
     }
 }
