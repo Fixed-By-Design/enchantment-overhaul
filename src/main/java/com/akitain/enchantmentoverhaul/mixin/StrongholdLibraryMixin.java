@@ -3,15 +3,15 @@ package com.akitain.enchantmentoverhaul.mixin;
 import com.akitain.enchantmentoverhaul.enchant.ModEnchantments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.util.Util;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
@@ -44,81 +44,54 @@ public abstract class StrongholdLibraryMixin extends StructurePiece {
     );
 
     @Inject(method = "postProcess", at = @At("TAIL"))
-    private void modifyLibraryGround(WorldGenLevel world, StructureManager structureManager, ChunkGenerator chunkGenerator, RandomSource random, BoundingBox chunkBox, ChunkPos chunkPos, BlockPos pivot, CallbackInfo ci) {
+    private void modifyLibraryGround(WorldGenLevel level, StructureManager structureManager, ChunkGenerator chunkGenerator, RandomSource random, BoundingBox chunkBox, ChunkPos chunkPos, BlockPos pivot, CallbackInfo ci) {
         BlockState air = Blocks.AIR.defaultBlockState();
         BlockState bookshelf = Blocks.BOOKSHELF.defaultBlockState();
 
-        this.placeBlock(world, Blocks.OBSIDIAN.defaultBlockState(), 10, 0, 7, chunkBox);
+        this.placeBlock(level, Blocks.OBSIDIAN.defaultBlockState(), 10, 0, 7, chunkBox);
 
         // Remove bookshelves around Z=9
-        this.placeBlock(world, air, 9, 2, 9, chunkBox);
-        this.placeBlock(world, air, 9, 3, 9, chunkBox);
-        this.placeBlock(world, air, 10, 3, 9, chunkBox);
+        this.placeBlock(level, air, 9, 2, 9, chunkBox);
+        this.placeBlock(level, air, 9, 3, 9, chunkBox);
+        this.placeBlock(level, air, 10, 3, 9, chunkBox);
 
         // Remove bookshelves around Z=7
-        this.placeBlock(world, air, 9, 1, 7, chunkBox);
-        this.placeBlock(world, air, 10, 1, 7, chunkBox);
-        this.placeBlock(world, air, 9, 2, 7, chunkBox);
-        this.placeBlock(world, air, 10, 2, 7, chunkBox);
-        this.placeBlock(world, air, 9, 3, 7, chunkBox);
-        this.placeBlock(world, air, 10, 3, 7, chunkBox);
+        this.placeBlock(level, air, 9, 1, 7, chunkBox);
+        this.placeBlock(level, air, 10, 1, 7, chunkBox);
+        this.placeBlock(level, air, 9, 2, 7, chunkBox);
+        this.placeBlock(level, air, 10, 2, 7, chunkBox);
+        this.placeBlock(level, air, 9, 3, 7, chunkBox);
+        this.placeBlock(level, air, 10, 3, 7, chunkBox);
 
         // Remove bookshelves around Z=5
-        this.placeBlock(world, air, 9, 2, 5, chunkBox);
-        this.placeBlock(world, air, 9, 3, 5, chunkBox);
-        this.placeBlock(world, air, 10, 3, 5, chunkBox);
+        this.placeBlock(level, air, 9, 2, 5, chunkBox);
+        this.placeBlock(level, air, 9, 3, 5, chunkBox);
+        this.placeBlock(level, air, 10, 3, 5, chunkBox);
 
         // Add bookshelves where vanilla had air
-        this.placeBlock(world, bookshelf, 11, 1, 9, chunkBox);
-        this.placeBlock(world, bookshelf, 11, 2, 9, chunkBox);
-        this.placeBlock(world, bookshelf, 11, 2, 5, chunkBox);
+        this.placeBlock(level, bookshelf, 11, 1, 9, chunkBox);
+        this.placeBlock(level, bookshelf, 11, 2, 9, chunkBox);
+        this.placeBlock(level, bookshelf, 11, 2, 5, chunkBox);
 
         // Chiseled bookshelves with enchanted books
-        placeChiseledBookshelf(world, random, 10, 1, 9, Direction.SOUTH, chunkBox);
-        placeChiseledBookshelf(world, random, 12, 1, 7, Direction.WEST, chunkBox);
-        placeChiseledBookshelf(world, random, 12, 1, 6, Direction.WEST, chunkBox);
-        placeChiseledBookshelf(world, random, 11, 1, 5, Direction.NORTH, chunkBox);
+        placeChiseledBookshelf(level, random, 10, 1, 9, Direction.SOUTH, chunkBox);
+        placeChiseledBookshelf(level, random, 12, 1, 7, Direction.WEST, chunkBox);
+        placeChiseledBookshelf(level, random, 12, 1, 6, Direction.WEST, chunkBox);
+        placeChiseledBookshelf(level, random, 11, 1, 5, Direction.NORTH, chunkBox);
     }
 
     @Unique
-    private void placeChiseledBookshelf(WorldGenLevel world, RandomSource random, int x, int y, int z, Direction facing, BoundingBox bb) {
+    private void placeChiseledBookshelf(WorldGenLevel level, RandomSource random, int x, int y, int z, Direction facing, BoundingBox chunkBox) {
+        int slot = random.nextInt(ChiseledBookShelfBlockEntity.MAX_BOOKS_IN_STORAGE);
         BlockState state = Blocks.CHISELED_BOOKSHELF.defaultBlockState()
-                .setValue(ChiseledBookShelfBlock.FACING, facing);
+                .setValue(ChiseledBookShelfBlock.FACING, facing)
+                .setValue(ChiseledBookShelfBlock.SLOT_OCCUPIED_PROPERTIES.get(slot), true);
+        this.placeBlock(level, state, x, y, z, chunkBox);
 
-        int bookCount = 1;
-        boolean[] occupied = new boolean[6];
-        for (int i = 0; i < bookCount; i++) {
-            occupied[random.nextInt(6)] = true;
+        BlockPos pos = this.getWorldPos(x, y, z);
+        if (chunkBox.isInside(pos) && level.getBlockEntity(pos) instanceof ChiseledBookShelfBlockEntity shelf) {
+            Holder<Enchantment> enchantment = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Util.getRandom(BOOK_POOL, random));
+            shelf.setItemNoUpdate(slot, EnchantmentHelper.createBook(new EnchantmentInstance(enchantment, 1)));
         }
-
-        for (int i = 0; i < 6; i++) {
-            if (occupied[i]) {
-                state = state.setValue(ChiseledBookShelfBlock.SLOT_OCCUPIED_PROPERTIES.get(i), true);
-            }
-        }
-
-        this.placeBlock(world, state, x, y, z, bb);
-
-        BlockPos worldPos = this.getWorldPos(x, y, z);
-        if (bb.isInside(worldPos) && world.getBlockEntity(worldPos) instanceof ChiseledBookShelfBlockEntity shelf) {
-            for (int slot = 0; slot < 6; slot++) {
-                if (occupied[slot]) {
-                    shelf.setItemNoUpdate(slot, createEnchantedBook(world, random));
-                }
-            }
-        }
-    }
-
-    @Unique
-    private static ItemStack createEnchantedBook(WorldGenLevel world, RandomSource random) {
-        ResourceKey<Enchantment> key = BOOK_POOL.get(random.nextInt(BOOK_POOL.size()));
-        var registry = world.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
-        var holder = registry.getOrThrow(key);
-
-        ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
-        ItemEnchantments.Mutable builder = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
-        builder.upgrade(holder, 1);
-        book.set(DataComponents.STORED_ENCHANTMENTS, builder.toImmutable());
-        return book;
     }
 }

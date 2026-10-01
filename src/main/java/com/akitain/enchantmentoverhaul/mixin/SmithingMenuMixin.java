@@ -23,10 +23,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class SmithingMenuMixin extends ItemCombinerMenu {
 
     @Unique
-    private UpgradeType pendingType = null;
+    private @Nullable UpgradeType pendingType;
 
-    private SmithingMenuMixin(@Nullable MenuType<?> type, int syncId, Inventory playerInventory, ContainerLevelAccess context, ItemCombinerMenuSlotDefinition forgingSlotsManager) {
-        super(type, syncId, playerInventory, context, forgingSlotsManager);
+    private SmithingMenuMixin(@Nullable MenuType<?> menuType, int containerId, Inventory inventory, ContainerLevelAccess access, ItemCombinerMenuSlotDefinition slotDefinition) {
+        super(menuType, containerId, inventory, access, slotDefinition);
     }
 
     @Inject(method = "createResult", at = @At("TAIL"))

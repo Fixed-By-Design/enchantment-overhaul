@@ -21,7 +21,7 @@ public class VeilDetectionMixin {
 
     // A non-positive range means unlimited: scaling it would hide the wearer from every check, including retaliation.
     @Inject(method = "test", at = @At("HEAD"), cancellable = true)
-    private void applyVeil(ServerLevel world, LivingEntity attacker, LivingEntity target, CallbackInfoReturnable<Boolean> cir) {
+    private void applyVeil(ServerLevel level, LivingEntity attacker, LivingEntity target, CallbackInfoReturnable<Boolean> cir) {
         if (attacker == null || target == null || this.range <= 0) return;
 
         if (!ModEnchantmentHelper.hasEnchantment(ModEnchantments.VEIL, target.getItemBySlot(EquipmentSlot.HEAD))) return;

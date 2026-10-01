@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class HoningProjectileMixin {
 
     @Inject(method = "createProjectile", at = @At("RETURN"))
-    private void eoHoningProjectileDamage(Level level, LivingEntity shooter, ItemStack weapon, ItemStack projectile, boolean isCrit, CallbackInfoReturnable<Projectile> cir) {
+    private void addHoningDamage(Level level, LivingEntity shooter, ItemStack weapon, ItemStack projectile, boolean isCrit, CallbackInfoReturnable<Projectile> cir) {
         int honing = UpgradeType.HONING.currentLevel(weapon);
         if (honing <= 0) return;
         if (cir.getReturnValue() instanceof AbstractArrow arrow) {

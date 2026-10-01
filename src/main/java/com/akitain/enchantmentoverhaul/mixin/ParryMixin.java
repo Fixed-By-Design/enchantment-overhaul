@@ -33,7 +33,7 @@ public abstract class ParryMixin {
     @Shadow public abstract int getTicksUsingItem();
 
     @Inject(method = "blockUsingItem", at = @At("HEAD"))
-    private void eoParryKnockback(ServerLevel level, LivingEntity attacker, CallbackInfo ci) {
+    private void knockBackParriedAttacker(ServerLevel level, LivingEntity attacker, CallbackInfo ci) {
         if (!isParrying(getItemBlockingWith())) return;
         LivingEntity defender = (LivingEntity) (Object) this;
         attacker.knockback(PARRY_KNOCKBACK, defender.getX() - attacker.getX(), defender.getZ() - attacker.getZ());
@@ -41,7 +41,7 @@ public abstract class ParryMixin {
 
     @WrapWithCondition(method = "applyItemBlocking",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/component/BlocksAttacks;hurtBlockingItem(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/InteractionHand;F)V"))
-    private boolean eoParrySkipDurability(BlocksAttacks blocksAttacks, Level level, ItemStack item, LivingEntity user, InteractionHand hand, float damage) {
+    private boolean skipParryDurabilityLoss(BlocksAttacks blocksAttacks, Level level, ItemStack item, LivingEntity user, InteractionHand hand, float damage) {
         return !isParrying(item);
     }
 

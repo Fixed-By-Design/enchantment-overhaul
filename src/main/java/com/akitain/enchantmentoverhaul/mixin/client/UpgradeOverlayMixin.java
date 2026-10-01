@@ -1,5 +1,6 @@
 package com.akitain.enchantmentoverhaul.mixin.client;
 
+import com.akitain.enchantmentoverhaul.EnchantmentOverhaul;
 import com.akitain.enchantmentoverhaul.enchant.InnateMaterialProperties;
 import com.akitain.enchantmentoverhaul.smithing.UpgradeType;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.EquipmentAssetManager;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
@@ -25,8 +27,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EquipmentLayerRenderer.class)
 public class UpgradeOverlayMixin {
-
-    private static final String MOD = "enchantment-overhaul";
 
     @Unique
     private TextureAtlas upgradeAtlas;
@@ -63,7 +63,7 @@ public class UpgradeOverlayMixin {
     @Unique
     private <S> void renderOverlay(String spritePath, Model<? super S> model, S state, PoseStack matrices,
                                     SubmitNodeCollector queue, int light, int outlineColor, int order) {
-        TextureAtlasSprite sprite = upgradeAtlas.getSprite(Identifier.fromNamespaceAndPath(MOD, spritePath));
+        TextureAtlasSprite sprite = upgradeAtlas.getSprite(Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, spritePath));
         if (sprite == null) return;
 
         queue.order(order)
@@ -74,7 +74,7 @@ public class UpgradeOverlayMixin {
 
     @Unique
     private static String getPaletteName(ItemStack stack) {
-        String id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
+        String id = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
         if (id.startsWith("chainmail_")) return "chainmail";
 
         String mat = InnateMaterialProperties.getMaterial(stack);

@@ -35,8 +35,8 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
     @Unique
     private static final boolean EASY_ANVILS = FabricLoader.getInstance().isModLoaded("easyanvils");
 
-    private AnvilMenuMixin(@Nullable MenuType<?> type, int syncId, Inventory playerInventory, ContainerLevelAccess context, ItemCombinerMenuSlotDefinition forgingSlotsManager) {
-        super(type, syncId, playerInventory, context, forgingSlotsManager);
+    private AnvilMenuMixin(@Nullable MenuType<?> menuType, int containerId, Inventory inventory, ContainerLevelAccess access, ItemCombinerMenuSlotDefinition slotDefinition) {
+        super(menuType, containerId, inventory, access, slotDefinition);
     }
 
     @Inject(method = "createResult", at = @At("HEAD"), cancellable = true)
@@ -89,6 +89,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
         ci.cancel();
     }
 
+    @Unique
     private int tryRestoreSlot(ItemStack first, ItemStack second, ItemStack result) {
         int penalty = SlotSystem.getGrindstonePenalty(first);
         if (penalty <= 0 || second.isEmpty()) return 0;
@@ -98,6 +99,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
         return getRestoreCost(first);
     }
 
+    @Unique
     private static int getRestoreCost(ItemStack stack) {
         String id = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
         if (id.startsWith("netherite_")) return 10;
@@ -108,6 +110,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
         return 2;
     }
 
+    @Unique
     private int tryRepair(ItemStack first, ItemStack second, ItemStack result) {
         if (second.isEmpty() || !first.isDamageableItem() || !first.isValidRepairItem(second)) return 0;
 
@@ -125,6 +128,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
         return units;
     }
 
+    @Unique
     private void tryRename(ItemStack first, ItemStack result) {
         if (this.itemName == null || this.itemName.isBlank()) {
             result.remove(DataComponents.CUSTOM_NAME);
@@ -135,6 +139,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
         }
     }
 
+    @Unique
     private void clearOutput(CallbackInfo ci) {
         this.repairItemCountCost = 0;
         this.onlyRenaming = false;

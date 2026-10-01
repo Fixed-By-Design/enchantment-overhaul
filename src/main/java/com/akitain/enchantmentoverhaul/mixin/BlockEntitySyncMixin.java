@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class BlockEntitySyncMixin {
 
     @Inject(method = "getUpdatePacket", at = @At("HEAD"), cancellable = true)
-    private void eoSyncBookshelfPacket(CallbackInfoReturnable<Packet<ClientGamePacketListener>> cir) {
+    private void syncBookshelfPacket(CallbackInfoReturnable<Packet<ClientGamePacketListener>> cir) {
         BlockEntity self = (BlockEntity) (Object) this;
         if (self instanceof ChiseledBookShelfBlockEntity) {
             cir.setReturnValue(ClientboundBlockEntityDataPacket.create(self));
@@ -28,7 +28,7 @@ public class BlockEntitySyncMixin {
     }
 
     @Inject(method = "getUpdateTag", at = @At("HEAD"), cancellable = true)
-    private void eoSyncBookshelfTag(HolderLookup.Provider registries, CallbackInfoReturnable<CompoundTag> cir) {
+    private void syncBookshelfTag(HolderLookup.Provider registries, CallbackInfoReturnable<CompoundTag> cir) {
         BlockEntity self = (BlockEntity) (Object) this;
         if (self instanceof ChiseledBookShelfBlockEntity) {
             cir.setReturnValue(self.saveCustomOnly(registries));
