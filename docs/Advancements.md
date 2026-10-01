@@ -7,7 +7,7 @@ Six custom advancements integrated into vanilla advancement tabs.
 | Advancement | Trigger | Parent |
 |---|---|---|
 | Page Turner | Pick up an enchanted book | Adventure root |
-| Forbidden Knowledge | Place an endgame enchanted book in a chiseled bookshelf | Page Turner |
+| Forbidden Knowledge | Open an enchanting table with an endgame book in its chiseled bookshelves | Page Turner |
 
 Endgame enchantments triggering Forbidden Knowledge: Veil, Swift Sneak, Curse of Binding, Wind Burst, Breach, Lunge, Last Stand, Mending.
 

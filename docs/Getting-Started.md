@@ -18,7 +18,7 @@ The enchanting table no longer rolls random enchantments. You find enchanted boo
 
 4. Collect enchanted books. Each structure has a curated pool. Villages have Feather Falling and Knockback. Dungeons have Thorns. Mineshafts have Fortune and Silk Touch. See [[Book Locations]] for the full list.
 5. Set up an enchanting station. Place chiseled bookshelves within 2 blocks of an enchanting table. Slot your books in. Each book permanently adds the enchantment to the catalogue.
-6. Enchant your gear. Open the enchanting table, select an enchantment from the catalogue, place the matching [[reagent|Enchantment List]] in the bottom slot, and pay the XP cost.
+6. Enchant your gear. Open the enchanting table, place your item and the matching [[reagent|Enchantment List]] next to it, pick an enchantment level from the catalogue, then take the result to pay the reagent and XP.
 7. Surround with normal bookshelves. Each bookshelf (up to 15) reduces the reagent cost by ~3.3%, maxing at 50% discount.
 
 ## Late Game (Nether, End)

@@ -1,6 +1,6 @@
 # Enchantment List
 
-## Vanilla Enchantments Kept (24)
+## Vanilla Enchantments Kept (31)
 
 | Enchantment | Max | Item | Effect |
 |---|---|---|---|
@@ -36,17 +36,18 @@
 | Mending | I (3 slots) | Any | XP repairs item |
 | Lure | III | Fishing Rod | Faster fish bite |
 
-## New Enchantments (8)
+## New Enchantments (9)
 
 | Enchantment | Max | Item | Effect |
 |---|---|---|---|
-| Veil | I | Helmet | Mobs detect at 25% of their base follow range, nametag hidden to other players |
+| Veil | I | Helmet | Mobs detect at 25% of their base follow range, nametag hidden behind walls |
 | Last Stand | III | Chestplate | Below 20% HP, -10% damage taken per level |
 | Step-Up | I | Boots | Adds 0.4 to step height (0.6 to 1.0), walk up full blocks without jumping. Disabled while sneaking. |
 | Venom | II | Sword/Spear | Apply Poison on hit |
 | Burnishing | I | Axe | Right-click weathering copper to strip all oxidation in one click; the axe loses durability equal to the stages skipped |
 | Wraith | I | Armor | The enchanted piece is hidden while the wearer has Invisibility (per piece) |
 | Curse of Fragility | I | Any | Double durability damage, +1 slot |
+| Parry | I | Shield | Blocking within 15 ticks of raising the shield knocks the attacker back and costs no durability |
 | Curse of Hunger | I | Armor | +30% hunger per piece, +1 slot |
 
 ## Disabled Enchantments (12)
@@ -56,7 +57,7 @@ These are replaced by the [[Smithing Table]] or [[Innate Material Properties]] s
 | Enchantment | Replaced By |
 |---|---|
 | Protection | Smithing (Warding) |
-| Fire Protection | Innate (Copper/Netherite) |
+| Fire Protection | Innate (Netherite) |
 | Blast Protection | Innate (Diamond) |
 | Projectile Protection | Innate (Iron/Chainmail) |
 | Sharpness | Smithing (Honing) |
@@ -70,52 +71,59 @@ These are replaced by the [[Smithing Table]] or [[Innate Material Properties]] s
 
 ## Reagent Table
 
-Each enchantment requires a specific reagent item in the [[Enchanting Table]] alongside XP. Base cost is 2 reagents per level, reduced up to 50% by surrounding normal bookshelves.
+Each enchantment requires a reagent tied to its theme alongside XP. Stronger enchantments ask for rarer reagents or larger amounts: Mending takes Ghast Tears, Swift Sneak takes Sculk Sensors and Lunge takes Wind Charges, while Knockback only takes Pistons. Normal bookshelves reduce these costs by up to 50%; the final quantity is rounded up.
 
-| Enchantment | Reagent |
-|---|---|
-| Fire Aspect | Blaze Powder |
-| Flame | Blaze Powder |
-| Channeling | Lightning Rod |
-| Frost Walker | Packed Ice |
-| Thorns | Cactus |
-| Fortune | Emerald |
-| Looting | Rabbit Foot |
-| Silk Touch | Cobweb |
-| Luck of the Sea | Nautilus Shell |
-| Infinity | Spectral Arrow |
-| Depth Strider | Prismarine Shard |
-| Soul Speed | Soul Sand |
-| Swift Sneak | Echo Shard |
-| Riptide | Heart of the Sea |
-| Loyalty | Chain |
-| Multishot | Firework Rocket |
-| Piercing | Arrow |
-| Wind Burst | Breeze Rod |
-| Breach | Breeze Rod |
-| Respiration | Pufferfish |
-| Aqua Affinity | Prismarine Crystals |
-| Sweeping Edge | Iron Nugget |
-| Knockback | Piston |
-| Punch | Snowball |
-| Lunge | Slime Ball |
-| Feather Falling | Feather |
-| Quick Charge | String |
-| Lure | Tropical Fish |
-| Mending | Lapis Lazuli |
-| Veil | Fermented Spider Eye |
-| Last Stand | Golden Apple |
-| Step-Up | Rabbit Foot |
-| Venom | Spider Eye |
-| Burnishing | Honeycomb |
-| Wraith | Phantom Membrane |
-| Curse of Fragility | Glass Pane |
-| Curse of Hunger | Rotten Flesh |
-| Curse of Binding | Chain |
-| Curse of Vanishing | Phantom Membrane |
+Values separated by `/` are **cumulative costs from an unenchanted item** for levels I / II / III / IV. Upgrades pay only the difference between the rounded costs of the target and current levels, using the same bookshelf count.
+
+| Enchantment | Reagent | No bookshelves | 15 bookshelves |
+|---|---|---|---|
+| Fire Aspect | Blaze Powder | 4 / 8 | 2 / 4 |
+| Flame | Blaze Powder | 4 | 2 |
+| Channeling | Lightning Rod | 4 | 2 |
+| Frost Walker | Packed Ice | 4 / 8 | 2 / 4 |
+| Thorns | Cactus | 8 / 16 / 24 | 4 / 8 / 12 |
+| Fortune | Emerald | 8 / 20 / 36 | 4 / 10 / 18 |
+| Looting | Rabbit Foot | 4 / 8 / 12 | 2 / 4 / 6 |
+| Silk Touch | Cobweb | 2 | 1 |
+| Luck Of The Sea | Nautilus Shell | 2 / 4 / 6 | 1 / 2 / 3 |
+| Infinity | Spectral Arrow | 16 | 8 |
+| Depth Strider | Prismarine Shard | 4 / 8 / 12 | 2 / 4 / 6 |
+| Soul Speed | Soul Sand | 4 / 8 / 12 | 2 / 4 / 6 |
+| Swift Sneak | Sculk Sensor | 4 / 8 / 12 | 2 / 4 / 6 |
+| Riptide | Prismarine Crystals | 4 / 8 / 12 | 2 / 4 / 6 |
+| Loyalty | Lead | 2 / 4 / 6 | 1 / 2 / 3 |
+| Multishot | Firework Rocket | 4 | 2 |
+| Piercing | Arrow | 8 / 16 / 24 / 32 | 4 / 8 / 12 / 16 |
+| Wind Burst | Breeze Rod | 2 / 4 / 6 | 1 / 2 / 3 |
+| Respiration | Pufferfish | 2 / 4 / 6 | 1 / 2 / 3 |
+| Aqua Affinity | Prismarine Crystals | 2 | 1 |
+| Sweeping Edge | Iron Ingot | 4 / 8 / 12 | 2 / 4 / 6 |
+| Breach | Breeze Rod | 2 / 4 / 6 / 8 | 1 / 2 / 3 / 4 |
+| Knockback | Piston | 2 / 4 | 1 / 2 |
+| Punch | Snowball | 4 / 8 | 2 / 4 |
+| Lunge | Wind Charge | 4 / 8 / 12 | 2 / 4 / 6 |
+| Feather Falling | Feather | 4 / 8 / 12 / 16 | 2 / 4 / 6 / 8 |
+| Quick Charge | Redstone | 4 / 8 / 12 | 2 / 4 / 6 |
+| Lure | Tropical Fish | 2 / 4 / 6 | 1 / 2 / 3 |
+| Mending | Ghast Tear | 4 | 2 |
+| Curse of Binding | Iron Chain | 2 | 1 |
+| Curse of Vanishing | Phantom Membrane | 2 | 1 |
+| Step-Up | Rabbit Foot | 2 | 1 |
+| Venom | Spider Eye | 4 / 8 | 2 / 4 |
+| Last Stand | Golden Apple | 2 / 4 / 6 | 1 / 2 / 3 |
+| Curse of Fragility | Glass Pane | 2 | 1 |
+| Curse of Hunger | Rotten Flesh | 2 | 1 |
+| Veil | Fermented Spider Eye | 8 | 4 |
+| Burnishing | Honeycomb | 4 | 2 |
+| Wraith | Phantom Membrane | 2 | 1 |
+| Parry | Iron Bars | 4 | 2 |
+
+Mending also costs eight XP levels and three enchantment slots.
+
+Enchantments from other mods without a defined reagent use lapis lazuli at the original base cost of two per level. If a datapack raises the maximum level of a listed enchantment, its price continues using the final increment in that enchantment's table.
 
 ## Enchanted Book Display
 
-Enchanted books display as "<Enchantment> Book" in light purple (e.g., "Flame Book", "Sharpness V Book"). Cursed books show in red. The original "Enchanted Book" label appears as a gray italic subtitle in the tooltip.
+Enchanted books display as "<Enchantment> Book" in light purple (e.g., "Flame Book", "Fortune III Book"). Cursed books show in red. The original "Enchanted Book" label appears as a gray italic subtitle in the tooltip.
 
 ![Fortune Book tooltip](images/book-tooltip.png)

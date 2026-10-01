@@ -1,10 +1,7 @@
 package com.akitain.enchantmentoverhaul.mixin;
 
-import com.akitain.enchantmentoverhaul.component.ModComponents;
 import com.akitain.enchantmentoverhaul.enchant.LegendaryItems;
-import com.akitain.enchantmentoverhaul.enchant.SlotSystem;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AnvilMenu;
@@ -14,9 +11,7 @@ import net.minecraft.world.inventory.ItemCombinerMenu;
 import net.minecraft.world.inventory.ItemCombinerMenuSlotDefinition;
 import net.minecraft.world.inventory.MenuType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AnvilMenu.class)
-public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
+public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 
     @Shadow @Nullable private String itemName;
     @Shadow @Final private DataSlot cost;
@@ -36,9 +31,11 @@ public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
 
     @Unique
     private static final boolean EASY_ANVILS = FabricLoader.getInstance().isModLoaded("easyanvils");
+    @Unique
+    private static final int REPAIR_XP_COST = 1;
 
-    private AnvilScreenHandlerMixin(@Nullable MenuType<?> type, int syncId, Inventory playerInventory, ContainerLevelAccess context, ItemCombinerMenuSlotDefinition forgingSlotsManager) {
-        super(type, syncId, playerInventory, context, forgingSlotsManager);
+    private AnvilMenuMixin(@Nullable MenuType<?> menuType, int containerId, Inventory inventory, ContainerLevelAccess access, ItemCombinerMenuSlotDefinition slotDefinition) {
+        super(menuType, containerId, inventory, access, slotDefinition);
     }
 
     @Inject(method = "createResult", at = @At("HEAD"), cancellable = true)
@@ -72,57 +69,22 @@ public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
         if (EASY_ANVILS && second.isEmpty()) return;
 
         ItemStack result = first.copy();
-        int restoreCost = tryRestoreSlot(first, second, result);
         int repairUnits = tryRepair(first, second, result);
 
-        // Not a mod-handled operation: let vanilla and other mods handle renames
-        // and unrelated custom operations. Same-item combining was rejected above.
-        if (restoreCost <= 0 && repairUnits <= 0) return;
+        // Not a repair: let vanilla and other mods handle renames and unrelated
+        // custom operations. Same-item combining was rejected above.
+        if (repairUnits <= 0) return;
 
         tryRename(first, result);
-
-        int unitsConsumed = repairUnits > 0 ? repairUnits : 1;
-        this.repairItemCountCost = unitsConsumed;
+        this.repairItemCountCost = repairUnits;
         this.onlyRenaming = false;
-
         result.remove(DataComponents.REPAIR_COST);
-        this.cost.set(Math.max(1, restoreCost));
+        this.cost.set(REPAIR_XP_COST);
         this.resultSlots.setItem(0, result);
         ci.cancel();
     }
 
-    private int tryRestoreSlot(ItemStack first, ItemStack second, ItemStack result) {
-        int penalty = SlotSystem.getGrindstonePenalty(first);
-        if (penalty <= 0 || second.isEmpty()) return 0;
-        if (!first.isValidRepairItem(second)) return 0;
-
-        result.set(ModComponents.GRINDSTONE_PENALTY, penalty - 1);
-        return getRestoreCost(first);
-    }
-
-    private static Item getRepairIngot(ItemStack stack) {
-        String id = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
-        if (id.startsWith("netherite_")) return Items.NETHERITE_INGOT;
-        if (id.startsWith("diamond_")) return Items.DIAMOND;
-        if (id.startsWith("golden_")) return Items.GOLD_INGOT;
-        if (id.startsWith("iron_") || id.startsWith("chainmail_")) return Items.IRON_INGOT;
-        if (id.startsWith("copper_")) return Items.COPPER_INGOT;
-        if (id.startsWith("leather_")) return Items.LEATHER;
-        if (id.startsWith("wooden_")) return Items.OAK_PLANKS;
-        if (id.startsWith("stone_")) return Items.COBBLESTONE;
-        return Items.IRON_INGOT;
-    }
-
-    private static int getRestoreCost(ItemStack stack) {
-        String id = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
-        if (id.startsWith("netherite_")) return 10;
-        if (id.startsWith("diamond_")) return 8;
-        if (id.startsWith("golden_")) return 5;
-        if (id.startsWith("iron_") || id.startsWith("chainmail_")) return 5;
-        if (id.startsWith("copper_")) return 3;
-        return 2;
-    }
-
+    @Unique
     private int tryRepair(ItemStack first, ItemStack second, ItemStack result) {
         if (second.isEmpty() || !first.isDamageableItem() || !first.isValidRepairItem(second)) return 0;
 
@@ -140,18 +102,18 @@ public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
         return units;
     }
 
-    private boolean tryRename(ItemStack first, ItemStack result) {
-        if (this.itemName != null && !this.itemName.isBlank()) {
-            if (this.itemName.equals(first.getHoverName().getString())) return false;
-            result.set(DataComponents.CUSTOM_NAME, Component.literal(this.itemName));
-            return true;
+    @Unique
+    private void tryRename(ItemStack first, ItemStack result) {
+        if (this.itemName == null || this.itemName.isBlank()) {
+            result.remove(DataComponents.CUSTOM_NAME);
+            return;
         }
-
-        if (!first.has(DataComponents.CUSTOM_NAME)) return false;
-        result.remove(DataComponents.CUSTOM_NAME);
-        return true;
+        if (!this.itemName.equals(first.getHoverName().getString())) {
+            result.set(DataComponents.CUSTOM_NAME, Component.literal(this.itemName));
+        }
     }
 
+    @Unique
     private void clearOutput(CallbackInfo ci) {
         this.repairItemCountCost = 0;
         this.onlyRenaming = false;

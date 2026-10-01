@@ -6,21 +6,18 @@ The anvil is a maintenance station. Enchantment combining has been removed. Book
 
 | Action | Status |
 |---|---|
-| Repair (material) | Works, fixed cost, no escalation |
+| Repair (material) | Works, 1 level, no escalation |
 | Rename | Works |
-| Slot restoration | Works, restores grindstone penalties |
 | Book application | Removed |
 | Item + item combining | Removed |
 | Too Expensive | Removed |
 | Prior Work Penalty | Removed |
 
-### Slot Restoration
+### Repair
 
-After a grindstone removes enchantments and applies a -1 slot penalty, the anvil restores the lost slot. Place the item in the left slot and any of its repair materials in the right slot. Restoration accepts the same materials that repair the item's durability, so anything added by tags, datapacks, or other mods works too.
+Place the item in the left slot and its repair material in the right slot. Each material restores a quarter of the item's durability, and the whole repair costs 1 XP level. Any material added by tags, datapacks, or other mods works too.
 
-![Anvil restoring a grindstone penalty on a Diamond Sword](images/anvil-restore.png)
-
-Repair Materials:
+![Anvil repairing a bow with string](images/anvil-repair.png)
 
 | Item Material | Repair Material |
 |---|---|
@@ -32,19 +29,16 @@ Repair Materials:
 | Leather | Leather |
 | Wood | Oak Planks |
 | Stone | Cobblestone |
+| Bow / Crossbow / Fishing Rod | String |
+| Trident | Prismarine Shard |
+| Shears | Iron Ingot |
+| Flint and Steel | Flint |
+| Carrot on a Stick | Carrot |
+| Warped Fungus on a Stick | Warped Fungus |
+| Brush | Feather |
 
-Restoration XP Cost:
-
-| Item Material | XP Cost |
-|---|---|
-| Netherite | 10 levels |
-| Diamond | 8 levels |
-| Gold / Iron / Chainmail | 5 levels |
-| Copper | 3 levels |
-| Leather / Wood / Stone | 2 levels |
+Vanilla repairs these last items only by combining two copies, which the anvil no longer allows. Their materials come from the `enchantment-overhaul:repairs_<item>` item tags, so datapacks can change them.
 
 ## Grindstone
 
-The grindstone removes all enchantments from an item but permanently reduces the max slot count by 1. Re-enchanting becomes progressively more constrained unless you restore the slot via the anvil (see above).
-
-The penalty appears as dark red "broken" pips at the end of the [[Enchanting Table]] slot bar.
+The grindstone removes all enchantments from an item, curses included. The item keeps all of its slots, so it can be enchanted again right away.

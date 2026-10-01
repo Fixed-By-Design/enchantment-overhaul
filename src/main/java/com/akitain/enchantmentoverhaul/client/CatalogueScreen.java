@@ -1,532 +1,410 @@
 package com.akitain.enchantmentoverhaul.client;
 
 import com.akitain.enchantmentoverhaul.EnchantmentOverhaul;
-import com.akitain.enchantmentoverhaul.enchant.CatalogueScreenHandler;
-import com.akitain.enchantmentoverhaul.enchant.CatalogueScreenHandler.CatalogueEntry;
+import com.akitain.enchantmentoverhaul.enchant.BookshelfScanner;
+import com.akitain.enchantmentoverhaul.enchant.CatalogueMenu;
+import com.akitain.enchantmentoverhaul.enchant.CatalogueMenu.CatalogueEntry;
 import com.akitain.enchantmentoverhaul.enchant.EnchantmentCosts;
 import com.akitain.enchantmentoverhaul.enchant.SlotSystem;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.EnchantmentTags;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.object.book.BookModel;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
-@Environment(EnvType.CLIENT)
-public class CatalogueScreen extends AbstractContainerScreen<CatalogueScreenHandler> {
+public class CatalogueScreen extends AbstractContainerScreen<CatalogueMenu> {
 
-    private static final int BG_W = 176;
-    private static final int BG_H = 200;
-
-    private static final int CAT_X = 56;
-    private static final int CAT_Y = 16;
-    private static final int CAT_W = 114;
-    private static final int ROW_H = 19;
+    private static final int IMAGE_WIDTH = 176;
+    private static final int IMAGE_HEIGHT = 200;
+    private static final int LIST_X = 56;
+    private static final int LIST_Y = 16;
+    private static final int LIST_WIDTH = 114;
+    private static final int LIST_HEIGHT = 86;
+    private static final int ROW_HEIGHT = 19;
+    private static final int ROW_SPACING = 20;
+    private static final int ROW_TEXTURE_WIDTH = 110;
     private static final int VISIBLE_ROWS = 4;
-    private static final int CAT_H = 86;
-    private static final int SCROLLBAR_W = 7;
-
-    private static final int BOOK_X = 3;
-    private static final int BOOK_Y = 16;
-
-    private static final int LV_BTN = 14;
-    private static final int LV_GAP = 1;
-
+    private static final int SCROLLBAR_WIDTH = 7;
+    private static final int SCROLLBAR_HEIGHT = LIST_HEIGHT - 4;
+    private static final int LEVEL_BUTTON_SIZE = 14;
+    private static final int LEVEL_BUTTON_SPACING = 15;
     private static final int SLOT_BAR_Y = 104;
+    private static final int PIP_HEIGHT = 6;
+    private static final int PIP_TEXTURE_WIDTH = 128;
 
-    private static final int TEXT_LIGHT = 0xFFD8C8F0;
-
-    private static final Identifier SLOT_SWORD = Identifier.withDefaultNamespace("container/slot/sword");
-    private static final Identifier SLOT_AMETHYST = Identifier.withDefaultNamespace("container/slot/amethyst_shard");
+    private static final Identifier BACKGROUND = texture("catalogue");
     private static final Identifier BOOK_TEXTURE = Identifier.withDefaultNamespace("textures/entity/enchantment/enchanting_table_book.png");
-    private static final Identifier BACKGROUND_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue.png");
-    private static final Identifier ROW_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/row.png");
-    private static final Identifier ROW_HOVER_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/row_hover.png");
-    private static final Identifier ROW_SELECTED_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/row_selected.png");
-    private static final Identifier ROW_DISABLED_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/row_disabled.png");
-    private static final Identifier ROW_DISABLED_HOVER_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/row_disabled_hover.png");
-    private static final Identifier LEVEL_SELECTED_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/level_selected.png");
-    private static final Identifier LEVEL_SELECTED_AVAILABLE_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/level_selected_available.png");
-    private static final Identifier LEVEL_SELECTED_UNAVAILABLE_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/level_selected_unavailable.png");
-    private static final Identifier LEVEL_AVAILABLE_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/level_available.png");
-    private static final Identifier LEVEL_UNAVAILABLE_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/level_unavailable.png");
-    private static final Identifier SCROLLBAR_TRACK_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/scrollbar_track.png");
-    private static final Identifier SCROLLBAR_THUMB_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/scrollbar_thumb.png");
-    private static final Identifier SLOT_USED_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/slot_used.png");
-    private static final Identifier SLOT_PENDING_ON_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/slot_pending_on.png");
-    private static final Identifier SLOT_PENDING_OFF_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/slot_pending_off.png");
-    private static final Identifier SLOT_FREE_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/slot_free.png");
-    private static final Identifier SLOT_PENALTY_TEXTURE =
-            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/catalogue/slot_penalty.png");
+    private static final Identifier ROW = texture("catalogue/row");
+    private static final Identifier ROW_HOVER = texture("catalogue/row_hover");
+    private static final Identifier ROW_SELECTED = texture("catalogue/row_selected");
+    private static final Identifier ROW_DISABLED = texture("catalogue/row_disabled");
+    private static final Identifier ROW_DISABLED_HOVER = texture("catalogue/row_disabled_hover");
+    private static final Identifier LEVEL_SELECTED = texture("catalogue/level_selected");
+    private static final Identifier LEVEL_SELECTED_AVAILABLE = texture("catalogue/level_selected_available");
+    private static final Identifier LEVEL_SELECTED_UNAVAILABLE = texture("catalogue/level_selected_unavailable");
+    private static final Identifier LEVEL_AVAILABLE = texture("catalogue/level_available");
+    private static final Identifier LEVEL_UNAVAILABLE = texture("catalogue/level_unavailable");
+    private static final Identifier SCROLLBAR_TRACK = texture("catalogue/scrollbar_track");
+    private static final Identifier SCROLLBAR_THUMB = texture("catalogue/scrollbar_thumb");
+    private static final Identifier SLOT_USED = texture("catalogue/slot_used");
+    private static final Identifier SLOT_PENDING_ON = texture("catalogue/slot_pending_on");
+    private static final Identifier SLOT_PENDING_OFF = texture("catalogue/slot_pending_off");
+    private static final Identifier SLOT_FREE = texture("catalogue/slot_free");
+    private static final Identifier[] EMPTY_SLOT_SPRITES = {
+            Identifier.withDefaultNamespace("container/slot/sword"),
+            Identifier.withDefaultNamespace("container/slot/amethyst_shard")
+    };
 
-    private static final Identifier[] SLOT_PLACEHOLDERS = { SLOT_SWORD, SLOT_AMETHYST };
+    private static final Component INSERT_ITEM = Component.translatable("screen.enchantment-overhaul.catalogue.insert_item");
+    private static final Component NO_ENCHANTMENTS = Component.translatable("screen.enchantment-overhaul.catalogue.no_enchantments");
+    private static final Component XP_LEVELS = Component.translatable("screen.enchantment-overhaul.catalogue.xp_levels");
+    private static final Component SLOTS = Component.translatable("screen.enchantment-overhaul.catalogue.slots");
 
-    private static final Style SGA_STYLE = Style.EMPTY
-            .withFont(new net.minecraft.network.chat.FontDescription.Resource(Identifier.fromNamespaceAndPath("minecraft", "alt")));
-    private static final String SGA_CHARS = "abcdefghijklmnopqrstuvwxyz";
-
-    private final String[] sgaRows = new String[20];
-
-    private net.minecraft.client.model.object.book.BookModel bookModel;
-    private float scrollAmount;
-    private int scrollOffset;
+    private BookModel bookModel;
+    private float scrollOffs;
+    private int startIndex;
     private boolean scrolling;
-    private ItemStack lastItem = ItemStack.EMPTY;
 
-    public CatalogueScreen(CatalogueScreenHandler handler, Inventory inventory, Component title) {
-        super(handler, inventory, title, BG_W, BG_H);
-        this.titleLabelX = 8;
-        this.titleLabelY = 6;
+    public CatalogueScreen(CatalogueMenu menu, Inventory inventory, Component title) {
+        super(menu, inventory, title, IMAGE_WIDTH, IMAGE_HEIGHT);
         this.inventoryLabelX = 7;
         this.inventoryLabelY = 110;
-        for (int i = 0; i < sgaRows.length; i++) sgaRows[i] = randomSga(18);
+        menu.registerUpdateListener(this::containerChanged);
+    }
+
+    private static Identifier texture(String name) {
+        return Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "textures/gui/container/" + name + ".png");
     }
 
     @Override
     protected void init() {
         super.init();
-        menu.rebuildEntries();
-        bookModel = new net.minecraft.client.model.object.book.BookModel(
-                net.minecraft.client.model.object.book.BookModel.createBodyLayer().bakeRoot());
+        this.bookModel = new BookModel(this.minecraft.getEntityModels().bakeLayer(ModelLayers.BOOK));
+    }
+
+    private void containerChanged() {
+        this.scrollOffs = 0.0F;
+        this.startIndex = 0;
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor gfx, int mouseX, int mouseY, float deltaTicks) {
-        checkItemChanged();
-        super.extractRenderState(gfx, mouseX, mouseY, deltaTicks);
-        gfx.text(font, this.title, this.leftPos + titleLabelX, this.topPos + titleLabelY, 0xFF404040, false);
-        drawCatalogueTooltip(gfx, mouseX, mouseY);
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight);
+        graphics.book(this.bookModel, BOOK_TEXTURE, 40.0F, 0.9F, 0.1F, this.leftPos + 3, this.topPos + 16, this.leftPos + 53, this.topPos + 56);
+        this.extractEmptySlotSprites(graphics);
+        this.extractEntries(graphics, mouseX, mouseY);
+        this.extractScrollbar(graphics, mouseX, mouseY);
+        this.extractSlotBar(graphics);
     }
 
-    private void checkItemChanged() {
-        ItemStack current = menu.getSlot(0).getItem();
-        if (!ItemStack.matches(current, lastItem)) {
-            lastItem = current.copy();
-            menu.rebuildEntries();
-            scrollAmount = 0;
-            scrollOffset = 0;
-        }
-    }
-
-    @Override
-    public void extractContents(GuiGraphicsExtractor gfx, int mouseX, int mouseY, float deltaTicks) {
-        int x = this.leftPos, y = this.topPos;
-
-        gfx.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND_TEXTURE, x, y, 0, 0, BG_W, BG_H, BG_W, BG_H);
-        drawBook(gfx, x, y);
-        drawSlotPlaceholders(gfx, x, y);
-        drawCatalogue(gfx, x, y, mouseX, mouseY);
-        drawSlotBar(gfx, x, y);
-
-        super.extractContents(gfx, mouseX, mouseY, deltaTicks);
-    }
-
-    @Override
-    protected void extractLabels(GuiGraphicsExtractor gfx, int mouseX, int mouseY) {
-        gfx.text(font, this.playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x404040, false);
-    }
-
-    private void drawBook(GuiGraphicsExtractor gfx, int x, int y) {
-        if (bookModel == null) return;
-        int bx = x + BOOK_X;
-        int by = y + BOOK_Y;
-        gfx.book(bookModel, BOOK_TEXTURE, 40.0f, 0.9f, 0.1f, bx, by, bx + 50, by + 40);
-    }
-
-    private void drawSlotPlaceholders(GuiGraphicsExtractor gfx, int x, int y) {
-        for (int i = 0; i < 2; i++) {
-            Slot slot = menu.slots.get(i);
-            if (slot.getItem().isEmpty()) {
-                gfx.blitSprite(RenderPipelines.GUI_TEXTURED, SLOT_PLACEHOLDERS[i],
-                        x + slot.x, y + slot.y, 16, 16);
+    private void extractEmptySlotSprites(GuiGraphicsExtractor graphics) {
+        for (int i = 0; i < EMPTY_SLOT_SPRITES.length; i++) {
+            var slot = this.menu.getSlot(i);
+            if (!slot.hasItem()) {
+                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, EMPTY_SLOT_SPRITES[i], this.leftPos + slot.x, this.topPos + slot.y, 16, 16);
             }
         }
     }
 
-    private void drawCatalogue(GuiGraphicsExtractor gfx, int x, int y, int mouseX, int mouseY) {
-        int cx = x + CAT_X, cy = y + CAT_Y;
-
-        List<CatalogueEntry> entries = menu.getEntries();
+    private void extractEntries(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        List<CatalogueEntry> entries = this.menu.getEntries();
         if (entries.isEmpty()) {
-            String hint = menu.getSlot(0).getItem().isEmpty()
-                    ? "Insert item"
-                    : "Unlock enchantments with bookshelves";
-            List<net.minecraft.util.FormattedCharSequence> lines = font.split(Component.literal(hint), CAT_W - 8);
-            int totalH = lines.size() * (font.lineHeight + 2);
-            int startY = cy + (CAT_H - totalH) / 2;
-            for (int i = 0; i < lines.size(); i++) {
-                int lw = font.width(lines.get(i));
-                gfx.text(font, lines.get(i),
-                        cx + (CAT_W - lw) / 2,
-                        startY + i * (font.lineHeight + 2), 0xFF808080, false);
-            }
+            this.extractHint(graphics);
             return;
         }
 
-        int rowW = shouldScroll() ? CAT_W - SCROLLBAR_W - 4 : CAT_W - 4;
-        int end = Math.min(scrollOffset + VISIBLE_ROWS, entries.size());
-        for (int i = scrollOffset; i < end; i++) {
-            int row = i - scrollOffset;
-            int ry = cy + 2 + row * (ROW_H + 1);
-            drawRow(gfx, entries.get(i), i, cx + 2, ry, rowW, mouseX, mouseY);
+        int endIndex = Math.min(this.startIndex + VISIBLE_ROWS, entries.size());
+        for (int index = this.startIndex; index < endIndex; index++) {
+            this.extractEntry(graphics, entries.get(index), index, this.rowTop(index - this.startIndex), mouseX, mouseY);
         }
-
-        drawScrollbar(gfx, cx + CAT_W - SCROLLBAR_W - 2, cy + 2, CAT_H - 4);
     }
 
-    private boolean isLevelAffordable(CatalogueEntry entry, int level) {
-        if (level <= entry.currentLevel()) return false;
+    private void extractHint(GuiGraphicsExtractor graphics) {
+        Component hint = this.menu.getSlot(CatalogueMenu.ITEM_SLOT).hasItem() ? NO_ENCHANTMENTS : INSERT_ITEM;
+        List<FormattedCharSequence> lines = this.font.split(hint, LIST_WIDTH - 8);
+        int lineHeight = this.font.lineHeight + 2;
+        int top = this.topPos + LIST_Y + (LIST_HEIGHT - lines.size() * lineHeight) / 2;
+        for (int i = 0; i < lines.size(); i++) {
+            int x = this.leftPos + LIST_X + (LIST_WIDTH - this.font.width(lines.get(i))) / 2;
+            graphics.text(this.font, lines.get(i), x, top + i * lineHeight, 0xFF808080, false);
+        }
+    }
 
-        ItemStack item = menu.getSlot(0).getItem();
-        int slotCost = EnchantmentCosts.slotCost(entry.entry(), level, entry.currentLevel());
-        if (SlotSystem.getAvailableSlots(item) < slotCost) return false;
+    private void extractEntry(GuiGraphicsExtractor graphics, CatalogueEntry entry, int index, int top, int mouseX, int mouseY) {
+        int left = this.rowLeft();
+        int width = this.rowWidth();
+        boolean selected = index == this.menu.getSelectedIndex();
+        boolean hovered = mouseX >= left && mouseX < left + width && mouseY >= top && mouseY < top + ROW_HEIGHT;
+        boolean affordable = this.isAnyLevelAffordable(entry);
 
-        if (Minecraft.getInstance().player.isCreative()) return true;
+        Identifier row = selected ? ROW_SELECTED : affordable ? (hovered ? ROW_HOVER : ROW) : (hovered ? ROW_DISABLED_HOVER : ROW_DISABLED);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, row, left, top, 0, 0, width, ROW_HEIGHT, ROW_TEXTURE_WIDTH, ROW_HEIGHT);
+        if (hovered && affordable) graphics.requestCursor(CursorTypes.POINTING_HAND);
 
-        ItemStack reagent = menu.getSlot(1).getItem();
-        Item reagentItem = EnchantmentCosts.reagent(entry.key());
-        int reagentCost = EnchantmentCosts.reagentCost(level, entry.currentLevel(), menu.getNormalBookshelves());
-        int xpCost = EnchantmentCosts.xpCost(entry.key(), level, entry.currentLevel());
-        int playerXp = Minecraft.getInstance().player.experienceLevel;
+        int buttonsLeft = this.levelButtonsLeft(entry);
+        int nameColor = selected ? 0xFFE0C0E0 : affordable ? (hovered ? 0xFFB0A080 : 0xFF988870) : 0xFF605848;
+        EnchantmentNames.getInstance().initSeed(entry.key().identifier().hashCode());
+        FormattedText name = EnchantmentNames.getInstance().getRandomName(this.font, buttonsLeft - left - 6);
+        graphics.textWithWordWrap(this.font, name, left + 3, top + (ROW_HEIGHT - 8) / 2, buttonsLeft - left - 6, nameColor, true);
 
-        return reagent.is(reagentItem) && reagent.getCount() >= reagentCost
-                && (!menu.isXpCostEnabled() || playerXp >= xpCost);
+        for (int level = 1; level <= entry.maxLevel(); level++) {
+            int x = buttonsLeft + (level - 1) * LEVEL_BUTTON_SPACING;
+            int y = top + (ROW_HEIGHT - LEVEL_BUTTON_SIZE) / 2;
+            this.extractLevelButton(graphics, entry, level, selected, x, y);
+        }
+    }
+
+    private void extractLevelButton(GuiGraphicsExtractor graphics, CatalogueEntry entry, int level, boolean rowSelected, int x, int y) {
+        boolean affordable = this.menu.canEnchant(entry, level);
+        Identifier texture;
+        int color;
+        if (level <= entry.currentLevel()) {
+            texture = LEVEL_UNAVAILABLE;
+            color = 0xFF3E7A4E;
+        } else if (rowSelected && level == this.menu.getSelectedLevel()) {
+            texture = LEVEL_SELECTED;
+            color = 0xFFC0FF80;
+        } else if (rowSelected) {
+            texture = affordable ? LEVEL_SELECTED_AVAILABLE : LEVEL_SELECTED_UNAVAILABLE;
+            color = affordable ? 0xFFB890B8 : 0xFF685068;
+        } else {
+            texture = affordable ? LEVEL_AVAILABLE : LEVEL_UNAVAILABLE;
+            color = affordable ? 0xFF7A6A5A : 0xFF504840;
+        }
+
+        graphics.blit(RenderPipelines.GUI_TEXTURED, texture, x, y, 0, 0, LEVEL_BUTTON_SIZE, LEVEL_BUTTON_SIZE, LEVEL_BUTTON_SIZE, LEVEL_BUTTON_SIZE);
+        Component label = levelName(level);
+        graphics.text(this.font, label, x + (LEVEL_BUTTON_SIZE - this.font.width(label)) / 2, y + 3, color, true);
+    }
+
+    private void extractScrollbar(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        if (!this.isScrollBarActive()) return;
+
+        int x = this.scrollbarLeft();
+        int y = this.scrollbarTop();
+        graphics.blit(RenderPipelines.GUI_TEXTURED, SCROLLBAR_TRACK, x, y, 0, 0, SCROLLBAR_WIDTH, SCROLLBAR_HEIGHT, SCROLLBAR_WIDTH, SCROLLBAR_HEIGHT);
+
+        int thumbHeight = Math.max(10, SCROLLBAR_HEIGHT * VISIBLE_ROWS / this.menu.getEntries().size());
+        int thumbY = y + (int) ((SCROLLBAR_HEIGHT - thumbHeight) * this.scrollOffs);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, SCROLLBAR_THUMB, x, thumbY, 0, 0, SCROLLBAR_WIDTH, thumbHeight, SCROLLBAR_WIDTH, SCROLLBAR_HEIGHT);
+
+        if (this.isOverScrollbar(mouseX, mouseY)) {
+            graphics.requestCursor(this.scrolling ? CursorTypes.RESIZE_NS : CursorTypes.POINTING_HAND);
+        }
+    }
+
+    private void extractSlotBar(GuiGraphicsExtractor graphics) {
+        ItemStack item = this.menu.getSlot(CatalogueMenu.ITEM_SLOT).getItem();
+        if (item.isEmpty()) return;
+
+        int pips = SlotSystem.getMaxSlots(item);
+        int used = SlotSystem.getUsedSlots(item);
+        if (pips <= 0) return;
+
+        CatalogueEntry selected = this.menu.getSelectedEntry();
+        int pending = selected == null ? 0 : this.menu.slotCost(selected, this.menu.getSelectedLevel());
+
+        String count = used + "/" + pips;
+        int left = this.leftPos + LIST_X;
+        int right = left + LIST_WIDTH - this.font.width(count) - 4;
+        int y = this.topPos + SLOT_BAR_Y;
+        int gap = pips > 1 ? Mth.clamp((right - left - pips * 4) / (pips - 1), 1, 2) : 2;
+        int pipWidth = Math.max(4, (right - left - gap * (pips - 1)) / pips);
+        boolean blink = Util.getMillis() / 400 % 2 == 0;
+
+        for (int i = 0; i < pips; i++) {
+            Identifier pip = i < used ? SLOT_USED
+                    : i < used + pending ? (blink ? SLOT_PENDING_ON : SLOT_PENDING_OFF)
+                    : SLOT_FREE;
+            graphics.blit(RenderPipelines.GUI_TEXTURED, pip, left + i * (pipWidth + gap), y, 0, 0, pipWidth, PIP_HEIGHT, PIP_TEXTURE_WIDTH, PIP_HEIGHT);
+        }
+        graphics.text(this.font, count, right + 4, y - 1, 0xFFD8C8F0, true);
+    }
+
+    @Override
+    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        super.extractTooltip(graphics, mouseX, mouseY);
+        if (!this.isHovering(LIST_X, LIST_Y, LIST_WIDTH, LIST_HEIGHT, mouseX, mouseY)) return;
+
+        int index = this.indexAt(mouseY);
+        if (index < 0 || index >= this.menu.getEntries().size()) return;
+
+        CatalogueEntry entry = this.menu.getEntries().get(index);
+        int hoveredLevel = this.levelAt(entry, mouseX);
+        int level = hoveredLevel > 0 ? Math.max(entry.currentLevel() + 1, hoveredLevel)
+                : index == this.menu.getSelectedIndex() ? this.menu.getSelectedLevel()
+                : entry.currentLevel() + 1;
+        graphics.setComponentTooltipForNextFrame(this.font, this.costTooltip(entry, level), mouseX, mouseY);
+    }
+
+    private List<Component> costTooltip(CatalogueEntry entry, int level) {
+        ItemStack item = this.menu.getSlot(CatalogueMenu.ITEM_SLOT).getItem();
+        ItemStack reagent = this.menu.getSlot(CatalogueMenu.REAGENT_SLOT).getItem();
+        ItemStack requiredReagent = new ItemStack(EnchantmentCosts.reagent(entry.key()));
+        int reagentCost = this.menu.reagentCost(entry, level);
+        int xpCost = this.menu.xpCost(entry, level);
+        int slotCost = this.menu.slotCost(entry, level);
+
+        MutableComponent name = entry.enchantment().value().description().copy().append(CommonComponents.SPACE);
+        if (entry.currentLevel() > 0) name.append(levelName(entry.currentLevel())).append(" → ");
+        name.append(levelName(level)).withStyle(entry.enchantment().is(EnchantmentTags.CURSE) ? ChatFormatting.RED : ChatFormatting.LIGHT_PURPLE);
+
+        List<Component> tooltip = new ArrayList<>();
+        tooltip.add(name);
+        tooltip.add(CommonComponents.EMPTY);
+        tooltip.add(costLine(requiredReagent.getHoverName(), reagentCost, ItemStack.isSameItem(reagent, requiredReagent) && reagent.getCount() >= reagentCost));
+        if (this.menu.isXpCostEnabled()) tooltip.add(costLine(XP_LEVELS, xpCost, this.minecraft.player.experienceLevel >= xpCost));
+        tooltip.add(slotCost > 0
+                ? costLine(SLOTS, slotCost, SlotSystem.getAvailableSlots(item) >= slotCost)
+                : costLine(SLOTS, Component.literal("+1").withStyle(ChatFormatting.GREEN)));
+
+        if (this.menu.getBookshelves() > 0) {
+            long discount = Math.round(BookshelfScanner.reagentDiscount(this.menu.getBookshelves()) * 100);
+            tooltip.add(CommonComponents.EMPTY);
+            tooltip.add(Component.translatable("screen.enchantment-overhaul.catalogue.bookshelves", this.menu.getBookshelves(), discount)
+                    .withStyle(ChatFormatting.DARK_GRAY));
+        }
+        return tooltip;
+    }
+
+    private static Component costLine(Component label, int amount, boolean affordable) {
+        return costLine(label, Component.literal(String.valueOf(amount)).withStyle(affordable ? ChatFormatting.GREEN : ChatFormatting.RED));
+    }
+
+    private static Component costLine(Component label, Component amount) {
+        return Component.translatable("screen.enchantment-overhaul.catalogue.cost", label).withStyle(ChatFormatting.GRAY).append(amount);
+    }
+
+    @Override
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (this.clickEntry(event.x(), event.y())) return true;
+        if (this.isScrollBarActive() && this.isOverScrollbar(event.x(), event.y())) {
+            this.scrolling = true;
+            return true;
+        }
+        return super.mouseClicked(event, doubleClick);
+    }
+
+    private boolean clickEntry(double mouseX, double mouseY) {
+        int left = this.rowLeft();
+        int top = this.rowTop(0);
+        if (mouseX < left || mouseX >= left + this.rowWidth() || mouseY < top || mouseY >= this.topPos + LIST_Y + LIST_HEIGHT - 2) return false;
+
+        int index = this.indexAt(mouseY);
+        if (index < 0 || index >= this.menu.getEntries().size()) return false;
+
+        CatalogueEntry entry = this.menu.getEntries().get(index);
+        int hoveredLevel = this.levelAt(entry, mouseX);
+        int buttonId = CatalogueMenu.buttonId(index, hoveredLevel > 0 ? hoveredLevel : entry.currentLevel() + 1);
+        if (!this.menu.clickMenuButton(this.minecraft.player, buttonId)) return false;
+
+        this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, buttonId);
+        return true;
+    }
+
+    @Override
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        if (!this.scrolling || !this.isScrollBarActive()) return super.mouseDragged(event, dx, dy);
+
+        this.scrollOffs = Mth.clamp((float) (event.y() - this.scrollbarTop()) / SCROLLBAR_HEIGHT, 0.0F, 1.0F);
+        this.startIndex = (int) (this.scrollOffs * this.getOffscreenRows());
+        return true;
+    }
+
+    @Override
+    public boolean mouseReleased(MouseButtonEvent event) {
+        this.scrolling = false;
+        return super.mouseReleased(event);
+    }
+
+    @Override
+    public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
+        if (super.mouseScrolled(x, y, scrollX, scrollY)) return true;
+        if (!this.isScrollBarActive()) return false;
+
+        int offscreenRows = this.getOffscreenRows();
+        this.startIndex = Mth.clamp(this.startIndex - (int) scrollY, 0, offscreenRows);
+        this.scrollOffs = (float) this.startIndex / offscreenRows;
+        return true;
+    }
+
+    private boolean isScrollBarActive() {
+        return this.menu.getEntries().size() > VISIBLE_ROWS;
+    }
+
+    private int getOffscreenRows() {
+        return Math.max(0, this.menu.getEntries().size() - VISIBLE_ROWS);
+    }
+
+    private boolean isOverScrollbar(double mouseX, double mouseY) {
+        int x = this.scrollbarLeft();
+        int y = this.scrollbarTop();
+        return mouseX >= x && mouseX < x + SCROLLBAR_WIDTH && mouseY >= y && mouseY < y + SCROLLBAR_HEIGHT;
+    }
+
+    private int scrollbarLeft() {
+        return this.leftPos + LIST_X + LIST_WIDTH - SCROLLBAR_WIDTH - 2;
+    }
+
+    private int scrollbarTop() {
+        return this.topPos + LIST_Y + 2;
+    }
+
+    private int rowLeft() {
+        return this.leftPos + LIST_X + 2;
+    }
+
+    private int rowTop(int row) {
+        return this.topPos + LIST_Y + 2 + row * ROW_SPACING;
+    }
+
+    private int rowWidth() {
+        return this.isScrollBarActive() ? LIST_WIDTH - SCROLLBAR_WIDTH - 4 : LIST_WIDTH - 4;
+    }
+
+    private int indexAt(double mouseY) {
+        return this.startIndex + (int) (mouseY - this.rowTop(0)) / ROW_SPACING;
+    }
+
+    private int levelButtonsLeft(CatalogueEntry entry) {
+        return this.rowLeft() + this.rowWidth() - 2 - entry.maxLevel() * LEVEL_BUTTON_SPACING;
+    }
+
+    private int levelAt(CatalogueEntry entry, double mouseX) {
+        int left = this.levelButtonsLeft(entry);
+        if (mouseX < left) return 0;
+        return Math.min((int) (mouseX - left) / LEVEL_BUTTON_SPACING + 1, entry.maxLevel());
     }
 
     private boolean isAnyLevelAffordable(CatalogueEntry entry) {
-        for (int lv = 1; lv <= entry.maxLevel(); lv++) {
-            if (isLevelAffordable(entry, lv)) return true;
+        for (int level = entry.currentLevel() + 1; level <= entry.maxLevel(); level++) {
+            if (this.menu.canEnchant(entry, level)) return true;
         }
         return false;
     }
 
-    private void drawRow(GuiGraphicsExtractor gfx, CatalogueEntry entry, int idx, int rx, int ry, int rw, int mx, int my) {
-        boolean selected = idx == menu.getSelectedIndex();
-        boolean hovered = mx >= rx && mx < rx + rw && my >= ry && my < ry + ROW_H;
-        boolean affordable = isAnyLevelAffordable(entry);
-
-        Identifier rowTexture;
-        if (selected) {
-            rowTexture = ROW_SELECTED_TEXTURE;
-        } else if (affordable) {
-            rowTexture = hovered ? ROW_HOVER_TEXTURE : ROW_TEXTURE;
-        } else {
-            rowTexture = hovered ? ROW_DISABLED_HOVER_TEXTURE : ROW_DISABLED_TEXTURE;
-        }
-        gfx.blit(RenderPipelines.GUI_TEXTURED, rowTexture, rx, ry, 0, 0, rw, ROW_H, 110, ROW_H);
-
-        int lvX = rx + rw - 2 - entry.maxLevel() * (LV_BTN + LV_GAP);
-        int sgaMaxX = lvX - 3;
-
-        int sgaColor = selected ? 0xFFE0C0E0 : (affordable ? (hovered ? 0xFFB0A080 : 0xFF988870) : 0xFF605848);
-        String sga = sgaRows[idx % sgaRows.length];
-        int sgaY = ry + (ROW_H - 8) / 2;
-        Component sgaText = Component.literal(trimToWidth(sga, sgaMaxX - rx - 3)).setStyle(SGA_STYLE);
-        gfx.text(font, sgaText, rx + 3, sgaY, sgaColor, true);
-        int selLv = selected ? menu.getSelectedLevel() : 0;
-
-        for (int lv = 1; lv <= entry.maxLevel(); lv++) {
-            boolean owned = lv <= entry.currentLevel();
-            boolean lvSel = selected && lv == selLv;
-            boolean lvAffordable = isLevelAffordable(entry, lv);
-
-            Identifier lvTexture;
-            int lvColor;
-            if (owned) {
-                lvTexture = LEVEL_UNAVAILABLE_TEXTURE;
-                lvColor = 0xFF3E7A4E;
-            } else if (lvSel) {
-                lvTexture = LEVEL_SELECTED_TEXTURE;
-                lvColor = 0xFFC0FF80;
-            } else if (selected) {
-                lvTexture = lvAffordable ? LEVEL_SELECTED_AVAILABLE_TEXTURE : LEVEL_SELECTED_UNAVAILABLE_TEXTURE;
-                lvColor = lvAffordable ? 0xFFB890B8 : 0xFF685068;
-            } else {
-                lvTexture = lvAffordable ? LEVEL_AVAILABLE_TEXTURE : LEVEL_UNAVAILABLE_TEXTURE;
-                lvColor = lvAffordable ? 0xFF7A6A5A : 0xFF504840;
-            }
-
-            int lvY = ry + (ROW_H - LV_BTN) / 2;
-            gfx.blit(RenderPipelines.GUI_TEXTURED, lvTexture, lvX, lvY, 0, 0, LV_BTN, LV_BTN, LV_BTN, LV_BTN);
-
-            String r = toRoman(lv);
-            int tw = font.width(r);
-            gfx.text(font, r, lvX + (LV_BTN - tw) / 2, lvY + 3, lvColor, true);
-            lvX += LV_BTN + LV_GAP;
-        }
-    }
-
-    private void drawCatalogueTooltip(GuiGraphicsExtractor gfx, int mx, int my) {
-        int cx = this.leftPos + CAT_X, cy = this.topPos + CAT_Y;
-        if (mx < cx || mx >= cx + CAT_W || my < cy || my >= cy + CAT_H) return;
-
-        List<CatalogueEntry> entries = menu.getEntries();
-        int idx = scrollOffset + (my - cy - 2) / (ROW_H + 1);
-        if (idx < 0 || idx >= entries.size()) return;
-
-        CatalogueEntry entry = entries.get(idx);
-        ResourceKey<Enchantment> key = entry.key();
-        boolean selected = idx == menu.getSelectedIndex();
-
-        int rowW = shouldScroll() ? CAT_W - SCROLLBAR_W - 4 : CAT_W - 4;
-        int rx = cx + 2;
-        int lvX = rx + rowW - 2 - entry.maxLevel() * (LV_BTN + LV_GAP);
-        int level;
-        if (mx >= lvX) {
-            int lvIdx = (mx - lvX) / (LV_BTN + LV_GAP);
-            level = Math.max(entry.currentLevel() + 1, Math.min(lvIdx + 1, entry.maxLevel()));
-        } else if (selected) {
-            level = menu.getSelectedLevel();
-        } else {
-            level = entry.currentLevel() + 1;
-        }
-
-        Item reagentItem = EnchantmentCosts.reagent(key);
-        int reagentCost = EnchantmentCosts.reagentCost(level, entry.currentLevel(), menu.getNormalBookshelves());
-        int xpCost = EnchantmentCosts.xpCost(key, level, entry.currentLevel());
-        int slotCost = EnchantmentCosts.slotCost(entry.entry(), level, entry.currentLevel());
-
-        ItemStack item = menu.getSlot(0).getItem();
-        ItemStack reagent = menu.getSlot(1).getItem();
-        int playerXp = Minecraft.getInstance().player.experienceLevel;
-
-        boolean hasReagent = reagent.is(reagentItem) && reagent.getCount() >= reagentCost;
-        boolean hasXp = playerXp >= xpCost;
-        boolean hasSlots = SlotSystem.getAvailableSlots(item) >= slotCost;
-
-        String levelLabel = entry.currentLevel() > 0
-                ? " " + toRoman(entry.currentLevel()) + " → " + toRoman(level)
-                : " " + toRoman(level);
-        List<Component> tooltip = new ArrayList<>();
-        tooltip.add(Component.literal(entry.entry().value().description().getString() + levelLabel)
-                .withStyle(entry.entry().is(EnchantmentTags.CURSE) ? ChatFormatting.RED : ChatFormatting.LIGHT_PURPLE));
-        tooltip.add(Component.empty());
-        tooltip.add(costLine(new ItemStack(reagentItem).getHoverName(), reagentCost, hasReagent));
-        if (menu.isXpCostEnabled()) tooltip.add(costLine(label("xp_levels"), xpCost, hasXp));
-        if (slotCost > 0) {
-            tooltip.add(costLine(label("slots"), slotCost, hasSlots));
-        } else {
-            tooltip.add(Component.translatable("screen.enchantment-overhaul.catalogue.cost", label("slots")).withStyle(ChatFormatting.GRAY)
-                    .append(Component.literal("+1").withStyle(ChatFormatting.GREEN)));
-        }
-
-        if (menu.getNormalBookshelves() > 0) {
-            int pct = (int) (EnchantmentCosts.baseReagentCost(level) > 0
-                    ? (1.0 - (double) reagentCost / EnchantmentCosts.baseReagentCost(level)) * 100 : 0);
-            tooltip.add(Component.empty());
-            tooltip.add(Component.translatable("screen.enchantment-overhaul.catalogue.bookshelves",
-                            menu.getNormalBookshelves(), pct)
-                    .withStyle(ChatFormatting.DARK_GRAY));
-        }
-
-        gfx.setComponentTooltipForNextFrame(font, tooltip, mx, my);
-    }
-
-    private Component costLine(Component label, int amount, boolean has) {
-        ChatFormatting color = has ? ChatFormatting.GREEN : ChatFormatting.RED;
-        return Component.translatable("screen.enchantment-overhaul.catalogue.cost", label).withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(String.valueOf(amount)).withStyle(color));
-    }
-
-    private static Component label(String key) {
-        return Component.translatable("screen.enchantment-overhaul.catalogue." + key);
-    }
-
-    private void drawScrollbar(GuiGraphicsExtractor gfx, int sx, int sy, int sh) {
-        if (!shouldScroll()) return;
-        gfx.blit(RenderPipelines.GUI_TEXTURED, SCROLLBAR_TRACK_TEXTURE, sx, sy, 0, 0, SCROLLBAR_W, sh, SCROLLBAR_W, 82);
-
-        int thumbH = Math.max(10, sh * VISIBLE_ROWS / menu.getEntries().size());
-        int thumbY = sy + (int) ((sh - thumbH) * scrollAmount);
-        gfx.blit(RenderPipelines.GUI_TEXTURED, SCROLLBAR_THUMB_TEXTURE, sx, thumbY, 0, 0, SCROLLBAR_W, thumbH, SCROLLBAR_W, 82);
-    }
-
-    private void drawSlotBar(GuiGraphicsExtractor gfx, int x, int y) {
-        ItemStack item = menu.getSlot(0).getItem();
-        if (item.isEmpty()) return;
-
-        int max = SlotSystem.getMaxSlots(item);
-        int used = SlotSystem.getUsedSlots(item);
-        int penalty = SlotSystem.getGrindstonePenalty(item);
-        int totalPips = max + penalty;
-        if (totalPips <= 0) return;
-
-        int pendingCost = 0;
-        if (menu.getSelectedIndex() >= 0 && menu.getSelectedIndex() < menu.getEntries().size()) {
-            CatalogueEntry e = menu.getEntries().get(menu.getSelectedIndex());
-            pendingCost = EnchantmentCosts.slotCost(e.entry(), menu.getSelectedLevel(), e.currentLevel());
-        }
-
-        int barY = y + SLOT_BAR_Y;
-        int ph = 6;
-        String countText = used + "/" + max;
-        int countW = font.width(countText);
-        int barLeft = x + CAT_X;
-        int barRight = x + CAT_X + CAT_W - countW - 4;
-        int availableW = barRight - barLeft;
-        int gap = totalPips > 1 ? Math.max(1, Math.min(2, (availableW - totalPips * 4) / (totalPips - 1))) : 2;
-        int pw = Math.max(4, (availableW - gap * (totalPips - 1)) / totalPips);
-        int barX = barLeft;
-
-        for (int i = 0; i < totalPips; i++) {
-            int px = barX + i * (pw + gap);
-            Identifier pipTexture;
-            if (i < used) {
-                pipTexture = SLOT_USED_TEXTURE;
-            } else if (i < used + pendingCost) {
-                boolean blink = (System.currentTimeMillis() / 400) % 2 == 0;
-                pipTexture = blink ? SLOT_PENDING_ON_TEXTURE : SLOT_PENDING_OFF_TEXTURE;
-            } else if (i < max) {
-                pipTexture = SLOT_FREE_TEXTURE;
-            } else {
-                pipTexture = SLOT_PENALTY_TEXTURE;
-            }
-            gfx.blit(RenderPipelines.GUI_TEXTURED, pipTexture, px, barY, 0, 0, pw, ph, 128, ph);
-        }
-
-        int textX = barRight + 4;
-        gfx.text(font, countText, textX, barY - 1, TEXT_LIGHT, true);
-    }
-
-    // --- Input ---
-    @Override
-    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
-        double mx = click.x(), my = click.y();
-        int x = this.leftPos, y = this.topPos;
-
-        if (clickRow(mx, my, x, y)) return true;
-        if (clickScroll(mx, my, x, y)) return true;
-
-        return super.mouseClicked(click, doubled);
-    }
-
-    private boolean clickRow(double mx, double my, int x, int y) {
-        int cx = x + CAT_X, cy = y + CAT_Y;
-        int rowW = shouldScroll() ? CAT_W - SCROLLBAR_W - 4 : CAT_W - 4;
-        if (mx < cx + 2 || mx >= cx + 2 + rowW || my < cy + 2 || my >= cy + CAT_H - 2) return false;
-
-        List<CatalogueEntry> entries = menu.getEntries();
-        int idx = scrollOffset + (int) (my - cy - 2) / (ROW_H + 1);
-        if (idx < 0 || idx >= entries.size()) return false;
-
-        CatalogueEntry entry = entries.get(idx);
-        int rx = cx + 2;
-        int lvX = rx + rowW - 2 - entry.maxLevel() * (LV_BTN + LV_GAP);
-        int level = entry.currentLevel() + 1;
-        if (mx >= lvX) {
-            int lvIdx = (int) (mx - lvX) / (LV_BTN + LV_GAP);
-            if (lvIdx >= 0 && lvIdx < entry.maxLevel()) level = lvIdx + 1;
-        }
-
-        if (!isLevelAffordable(entry, level)) return false;
-
-        menu.setSelection(idx, level);
-        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F));
-        minecraft.gameMode.handleInventoryButtonClick(menu.containerId, idx * 10 + (level - 1));
-        return true;
-    }
-
-    private boolean clickScroll(double mx, double my, int x, int y) {
-        int sx = x + CAT_X + CAT_W - SCROLLBAR_W - 2;
-        int sy = y + CAT_Y + 2;
-        int sh = CAT_H - 4;
-        if (mx >= sx && mx < sx + SCROLLBAR_W && my >= sy && my < sy + sh && shouldScroll()) {
-            scrolling = true;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean mouseDragged(MouseButtonEvent click, double dx, double dy) {
-        if (scrolling && shouldScroll()) {
-            float top = this.topPos + CAT_Y + 2;
-            float sh = CAT_H - 4;
-            scrollAmount = Mth.clamp((float) (click.y() - top) / sh, 0, 1);
-            scrollOffset = (int) (scrollAmount * getMaxScroll());
-            return true;
-        }
-        return super.mouseDragged(click, dx, dy);
-    }
-
-    @Override
-    public boolean mouseReleased(MouseButtonEvent click) {
-        scrolling = false;
-        return super.mouseReleased(click);
-    }
-
-    @Override
-    public boolean mouseScrolled(double mx, double my, double hAmt, double vAmt) {
-        if (super.mouseScrolled(mx, my, hAmt, vAmt)) return true;
-        if (!shouldScroll()) return false;
-        int max = getMaxScroll();
-        scrollOffset = Mth.clamp(scrollOffset - (int) vAmt, 0, max);
-        scrollAmount = max > 0 ? (float) scrollOffset / max : 0;
-        return true;
-    }
-
-    private boolean shouldScroll() { return menu.getEntries().size() > VISIBLE_ROWS; }
-    private int getMaxScroll() { return Math.max(0, menu.getEntries().size() - VISIBLE_ROWS); }
-
-    private String trimToWidth(String text, int maxWidth) {
-        int w = 0;
-        for (int i = 0; i < text.length(); i++) {
-            w += font.width(Component.literal(String.valueOf(text.charAt(i))).setStyle(SGA_STYLE));
-            if (w > maxWidth) return text.substring(0, i);
-        }
-        return text;
-    }
-
-    private static String randomSga(int length) {
-        Random rng = new Random();
-        StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i < length; i++) sb.append(SGA_CHARS.charAt(rng.nextInt(SGA_CHARS.length())));
-        return sb.toString();
-    }
-
-    private static String toRoman(int n) {
-        return switch (n) {
-            case 1 -> "I";
-            case 2 -> "II";
-            case 3 -> "III";
-            case 4 -> "IV";
-            case 5 -> "V";
-            default -> String.valueOf(n);
-        };
+    private static Component levelName(int level) {
+        return Component.translatable("enchantment.level." + level);
     }
 }

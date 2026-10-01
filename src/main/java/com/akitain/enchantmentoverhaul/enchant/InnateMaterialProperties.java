@@ -1,30 +1,26 @@
 package com.akitain.enchantmentoverhaul.enchant;
 
+import com.akitain.enchantmentoverhaul.EnchantmentOverhaul;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 public class InnateMaterialProperties {
 
-    private static final float MAX_REDUCTION = 0.20f;
-    private static final EquipmentSlot[] ARMOR_SLOTS = {
-            EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET
-    };
+    public static final int PERCENT_PER_PIECE = 5;
 
     public static float getDamageMultiplier(LivingEntity entity, DamageSource source) {
-        int pieces = 0;
-        for (EquipmentSlot slot : ARMOR_SLOTS) {
-            ItemStack stack = entity.getItemBySlot(slot);
-            if (stack.isEmpty()) continue;
-            String material = getMaterial(stack);
-            if (material != null && resists(material, source)) pieces++;
-        }
-        if (pieces == 0) return 1.0f;
-        return 1.0f - (MAX_REDUCTION * pieces / 4.0f);
+        int pieces = HumanoidArmor.count(entity, stack -> resists(stack, source));
+        return 1.0f - pieces * PERCENT_PER_PIECE / 100.0f;
+    }
+
+    private static boolean resists(ItemStack stack, DamageSource source) {
+        String material = getMaterial(stack);
+        return material != null && resists(material, source);
     }
 
     public static String getMaterial(ItemStack stack) {
@@ -69,16 +65,16 @@ public class InnateMaterialProperties {
                 || source.is(DamageTypes.INDIRECT_MAGIC);
     }
 
-    public static String getResistanceName(String material) {
-        return switch (material) {
-            case "netherite" -> "Fire Resistance";
-            case "rose_gold" -> "Explosion Resistance";
-            case "copper" -> "Poison Resistance";
-            case "iron" -> "Projectile Resistance";
-            case "diamond" -> "Explosion Resistance";
-            case "gold" -> "Magic Resistance";
-            case "leather" -> "Fall Resistance";
+    public static Component getResistanceName(String material) {
+        String resistance = switch (material) {
+            case "netherite" -> "fire";
+            case "rose_gold", "diamond" -> "explosion";
+            case "copper" -> "poison";
+            case "iron" -> "projectile";
+            case "gold" -> "magic";
+            case "leather" -> "fall";
             default -> null;
         };
+        return resistance == null ? null : Component.translatable("innate_resistance." + EnchantmentOverhaul.MOD_ID + "." + resistance);
     }
 }

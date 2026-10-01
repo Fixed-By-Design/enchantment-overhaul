@@ -1,7 +1,8 @@
 package com.akitain.enchantmentoverhaul.mixin.client;
 
-import com.akitain.enchantmentoverhaul.component.ModComponents;
+import com.akitain.enchantmentoverhaul.EnchantmentOverhaul;
 import com.akitain.enchantmentoverhaul.enchant.InnateMaterialProperties;
+import com.akitain.enchantmentoverhaul.smithing.UpgradeType;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.Sheets;
@@ -12,11 +13,11 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.EquipmentAssetManager;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.EquipmentAsset;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,8 +26,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EquipmentLayerRenderer.class)
 public class UpgradeOverlayMixin {
-
-    private static final String MOD = "enchantment-overhaul";
 
     @Unique
     private TextureAtlas upgradeAtlas;
@@ -51,11 +50,11 @@ public class UpgradeOverlayMixin {
 
         int order = initialOrder;
 
-        if (stack.getOrDefault(ModComponents.WARDING_LEVEL, 0) > 0) {
+        if (UpgradeType.WARDING.currentLevel(stack) > 0) {
             renderOverlay(dir + "/warding_" + material, model, state, matrices, queue, light, outlineColor, order++);
         }
 
-        if (stack.getOrDefault(ModComponents.TEMPERING_LEVEL, 0) > 0) {
+        if (UpgradeType.TEMPERING.currentLevel(stack) > 0) {
             renderOverlay(dir + "/tempering_" + material, model, state, matrices, queue, light, outlineColor, order);
         }
     }
@@ -63,7 +62,7 @@ public class UpgradeOverlayMixin {
     @Unique
     private <S> void renderOverlay(String spritePath, Model<? super S> model, S state, PoseStack matrices,
                                     SubmitNodeCollector queue, int light, int outlineColor, int order) {
-        TextureAtlasSprite sprite = upgradeAtlas.getSprite(Identifier.fromNamespaceAndPath(MOD, spritePath));
+        TextureAtlasSprite sprite = upgradeAtlas.getSprite(Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, spritePath));
         if (sprite == null) return;
 
         queue.order(order)
@@ -74,7 +73,7 @@ public class UpgradeOverlayMixin {
 
     @Unique
     private static String getPaletteName(ItemStack stack) {
-        String id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
+        String id = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
         if (id.startsWith("chainmail_")) return "chainmail";
 
         String mat = InnateMaterialProperties.getMaterial(stack);

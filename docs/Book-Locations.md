@@ -8,26 +8,25 @@ Enchanted books are found in structure loot chests. Each structure has a curated
 |---|---|
 | Village Temple | Feather Falling, Step-Up, Knockback |
 | Village Weaponsmith | Knockback |
-| Village Armorer | Feather Falling |
-| Village Toolsmith | Step-Up |
+| Village Armorer | Feather Falling, Step-Up |
 | Village Fisher | Luck of the Sea, Lure |
 | Village Houses | Feather Falling, Knockback, Step-Up |
 | Igloo | Frost Walker |
 | Shipwreck (treasure) | Luck of the Sea, Lure |
-| Shipwreck (supply) | Luck of the Sea |
+| Shipwreck (supply) | Luck of the Sea, Burnishing |
 
 ## Medium (Overworld Underground / Structures)
 
 | Structure | Enchantments |
 |---|---|
 | Simple Dungeon | Knockback, Thorns, Punch |
-| Ruined Portal | Curse of Fragility, Vanishing Curse |
-| Underwater Ruin (small) | Aqua Affinity, Respiration |
+| Ruined Portal | Curse of Fragility, Curse of Vanishing |
+| Underwater Ruin (small) | Aqua Affinity, Respiration, Burnishing |
 | Desert Temple | Channeling, Curse of Fragility, Fire Aspect |
-| Jungle Temple | Thorns, Vanishing Curse, Looting, Curse of Hunger |
-| Ocean Ruins (big) | Depth Strider, Aqua Affinity, Respiration, Riptide, Loyalty |
-| Mineshaft | Silk Touch, Fortune |
-| Pillager Outpost | Multishot, Piercing, Quick Charge, Sweeping Edge, Punch |
+| Jungle Temple | Thorns, Curse of Vanishing, Looting, Curse of Hunger |
+| Underwater Ruin (big) | Depth Strider, Aqua Affinity, Respiration, Riptide, Loyalty |
+| Mineshaft | Silk Touch, Fortune, Burnishing |
+| Pillager Outpost | Multishot, Piercing, Quick Charge, Sweeping Edge, Punch, Parry |
 
 ## Hard (Nether / Deep Overworld)
 
@@ -35,8 +34,9 @@ Enchanted books are found in structure loot chests. Each structure has a curated
 |---|---|
 | Buried Treasure | Riptide, Loyalty, Depth Strider |
 | Nether Fortress | Fire Aspect, Flame, Venom, Looting |
-| Woodland Mansion | Sweeping Edge, Looting, Curse of Hunger, Silk Touch, Thorns |
+| Woodland Mansion | Sweeping Edge, Looting, Curse of Hunger, Silk Touch, Thorns, Wraith |
 | Bastion (all variants) | Soul Speed |
+| Bastion Hoglin Stable | Soul Speed, Fire Aspect |
 | Stronghold Library | Infinity, Fortune |
 | Stronghold Corridor | Fortune |
 | Stronghold Crossing | Infinity |
@@ -47,12 +47,12 @@ The Stronghold Library has been remodeled with chiseled bookshelves pre-filled w
 
 | Structure | Enchantments |
 |---|---|
-| Ancient City | Veil, Swift Sneak, Curse of Binding |
-| Trial Chambers (rare) | Wind Burst, Breach, Lunge, Last Stand |
-| Trial Chambers (ominous rare) | Wind Burst, Breach, Lunge, Last Stand |
+| Ancient City | Veil, Wraith, Swift Sneak, Curse of Binding |
+| Trial Chambers (rare) | Wind Burst, Breach, Lunge, Last Stand, Parry |
+| Trial Chambers (ominous rare) | Wind Burst, Breach, Lunge, Last Stand, Parry |
 | End City | Mending |
 
-These 8 enchantments (Veil, Swift Sneak, Curse of Binding, Wind Burst, Breach, Lunge, Last Stand, Mending) also trigger the [[Forbidden Knowledge|Advancements]] advancement when placed in a chiseled bookshelf.
+These 8 enchantments (Veil, Swift Sneak, Curse of Binding, Wind Burst, Breach, Lunge, Last Stand, Mending) also grant the [[Forbidden Knowledge|Advancements]] advancement the first time you open an enchanting table that reads one from its chiseled bookshelves.
 
 ## Villager Trades
 

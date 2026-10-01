@@ -20,22 +20,21 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BookshelfScanner {
 
+    public static final int MAX_DISCOUNT_BOOKSHELVES = 15;
+
     public record ScanResult(Set<ResourceKey<Enchantment>> unlocked, int normalBookshelves) {}
 
-    public static ScanResult scan(Level world, BlockPos tablePos) {
+    public static ScanResult scan(Level level, BlockPos tablePos) {
         Set<ResourceKey<Enchantment>> unlocked = new HashSet<>();
         int normalCount = 0;
 
         for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            if (!isUnobstructed(level, tablePos, offset)) continue;
+
             BlockPos shelfPos = tablePos.offset(offset);
-            BlockPos betweenPos = tablePos.offset(offset.getX() / 2, offset.getY(), offset.getZ() / 2);
-
-            if (!world.getBlockState(betweenPos).is(BlockTags.ENCHANTMENT_POWER_TRANSMITTER)) continue;
-
-            BlockState state = world.getBlockState(shelfPos);
-
+            BlockState state = level.getBlockState(shelfPos);
             if (state.is(Blocks.CHISELED_BOOKSHELF)) {
-                collectEnchantments(world, shelfPos, unlocked);
+                collectEnchantments(level, shelfPos, unlocked);
             } else if (state.is(BlockTags.ENCHANTMENT_POWER_PROVIDER)) {
                 normalCount++;
             }
@@ -44,8 +43,12 @@ public class BookshelfScanner {
         return new ScanResult(unlocked, normalCount);
     }
 
-    private static void collectEnchantments(Level world, BlockPos pos, Set<ResourceKey<Enchantment>> unlocked) {
-        if (!(world.getBlockEntity(pos) instanceof ChiseledBookShelfBlockEntity shelf)) return;
+    public static boolean isUnobstructed(Level level, BlockPos tablePos, BlockPos offset) {
+        return level.getBlockState(tablePos.offset(offset.getX() / 2, offset.getY(), offset.getZ() / 2)).is(BlockTags.ENCHANTMENT_POWER_TRANSMITTER);
+    }
+
+    private static void collectEnchantments(Level level, BlockPos pos, Set<ResourceKey<Enchantment>> unlocked) {
+        if (!(level.getBlockEntity(pos) instanceof ChiseledBookShelfBlockEntity shelf)) return;
 
         for (int i = 0; i < ChiseledBookShelfBlockEntity.MAX_BOOKS_IN_STORAGE; i++) {
             ItemStack book = shelf.getItem(i);
@@ -59,7 +62,7 @@ public class BookshelfScanner {
     }
 
     public static double reagentDiscount(int normalBookshelves) {
-        int capped = Math.min(normalBookshelves, 15);
-        return capped * (0.5 / 15.0);
+        int capped = Math.clamp(normalBookshelves, 0, MAX_DISCOUNT_BOOKSHELVES);
+        return capped * (0.5 / MAX_DISCOUNT_BOOKSHELVES);
     }
 }

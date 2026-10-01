@@ -1,6 +1,5 @@
 package com.akitain.enchantmentoverhaul.mixin;
 
-import com.akitain.enchantmentoverhaul.component.ModComponents;
 import net.minecraft.world.inventory.GrindstoneMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -10,16 +9,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(GrindstoneMenu.class)
-public class GrindstoneScreenHandlerMixin {
+public class GrindstoneMenuMixin {
 
     @Inject(method = "removeNonCursesFrom", at = @At("RETURN"))
-    private void applySlotPenalty(ItemStack item, CallbackInfoReturnable<ItemStack> cir) {
+    private void removeCursesToo(ItemStack item, CallbackInfoReturnable<ItemStack> cir) {
         ItemStack result = cir.getReturnValue();
-        if (result.isEmpty()) return;
-
-        EnchantmentHelper.updateEnchantments(result, components -> components.removeIf(enchantment -> true));
-
-        int penalty = result.getOrDefault(ModComponents.GRINDSTONE_PENALTY, 0);
-        result.set(ModComponents.GRINDSTONE_PENALTY, penalty + 1);
+        if (!result.isEmpty()) EnchantmentHelper.updateEnchantments(result, enchantments -> enchantments.removeIf(enchantment -> true));
     }
 }

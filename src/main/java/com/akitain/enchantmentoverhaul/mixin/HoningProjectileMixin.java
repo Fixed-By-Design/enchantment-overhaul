@@ -1,6 +1,5 @@
 package com.akitain.enchantmentoverhaul.mixin;
 
-import com.akitain.enchantmentoverhaul.component.ModComponents;
 import com.akitain.enchantmentoverhaul.smithing.UpgradeType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -19,12 +18,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class HoningProjectileMixin {
 
     @Inject(method = "createProjectile", at = @At("RETURN"))
-    private void eoHoningProjectileDamage(Level level, LivingEntity shooter, ItemStack weapon, ItemStack projectile, boolean isCrit, CallbackInfoReturnable<Projectile> cir) {
-        int honing = weapon.getOrDefault(ModComponents.HONING_LEVEL, 0);
+    private void addHoningDamage(Level level, LivingEntity shooter, ItemStack weapon, ItemStack projectile, boolean isCrit, CallbackInfoReturnable<Projectile> cir) {
+        int honing = UpgradeType.HONING.currentLevel(weapon);
         if (honing <= 0) return;
         if (cir.getReturnValue() instanceof AbstractArrow arrow) {
             double base = ((AbstractArrowBaseDamageAccessor) arrow).eo$getBaseDamage();
-            arrow.setBaseDamage(base + UpgradeType.honingBonus(honing));
+            arrow.setBaseDamage(base + UpgradeType.honingDamageBonus(honing));
         }
     }
 }

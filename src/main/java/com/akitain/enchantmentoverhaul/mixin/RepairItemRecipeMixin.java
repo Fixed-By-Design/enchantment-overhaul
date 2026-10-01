@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class RepairItemRecipeMixin {
 
     @Inject(method = "matches(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/world/level/Level;)Z", at = @At("HEAD"), cancellable = true)
-    private void disableCraftingRepair(CraftingInput input, Level world, CallbackInfoReturnable<Boolean> cir) {
+    private void disableCraftingRepair(CraftingInput input, Level level, CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(false);
     }
 }

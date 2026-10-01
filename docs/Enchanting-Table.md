@@ -25,7 +25,7 @@ Special items: Trident/Mace/Elytra (5), Turtle Helmet (5), Crossbow (4), Bow/Fis
 - 1 level = 1 slot
 - Exception: Mending costs 3 slots
 - Curses cost 0 slots and grant +1 bonus slot each
-- The grindstone removes all enchantments but permanently reduces max slots by 1 (restorable via anvil)
+- The grindstone removes all enchantments without costing any slot
 
 ## Adding Enchantments to the Catalogue
 
@@ -39,9 +39,9 @@ Normal bookshelves reduce reagent cost. The discount is linear: each bookshelf r
 
 ## Upgrading Enchantments
 
-You can raise an enchantment already on an item to a higher level without stripping it first. An applied enchantment that is below its max level appears in the catalogue with its owned levels shown as greyed, non-clickable pips, and only the next levels selectable. The tooltip reads "N to M".
+You can raise an enchantment already on an item to a higher level without stripping it first. An applied enchantment that is below its max level appears in the catalogue with its owned levels shown as greyed, non-clickable pips, and only the next levels selectable. The tooltip reads "N → M".
 
-The cost is the delta: slots, reagent, and XP are charged as the new level minus the current level, so reaching a level costs the same total whether you applied it directly or upgraded into it. Curses and single-level enchantments are not upgradeable.
+The cost is the delta: slots, reagent, and XP are charged as the new level minus the current level, so reaching a level costs the same total whether you applied it directly or upgraded into it, with the same number of bookshelves. Reagent costs are rounded before taking the difference. Curses and single-level enchantments are not upgradeable.
 
 The vanilla Stronghold Library has been remodeled into a starter enchanting room. The center now hosts an obsidian pedestal flanked by chiseled bookshelves pre-filled with random enchanted books drawn from the early-game pool. This gives you a guaranteed first taste of the enchanting catalogue once you reach the Stronghold.
 
@@ -53,23 +53,25 @@ The vanilla Stronghold Library has been remodeled into a starter enchanting room
 
 Left side (3 slots): item on top, reagent beside it, result on the bottom.
 
-Right side (scrollable catalogue): each row shows the enchantment name and a level selector (I, II, III...). Hovering shows the reagent cost, XP cost, and slot cost. Unaffordable rows and level buttons appear dimmed and are not clickable.
+Right side (scrollable catalogue): each row shows the enchantment in the enchanting table's runic script and a level selector (I, II, III...). Hovering shows the enchantment's name with its reagent, XP, and slot costs. Unaffordable rows and level buttons appear dimmed and are not clickable. A selected level stays selected while you add or swap reagents, and the result appears as soon as you can pay.
 
-Bottom (visual slot bar): pips show used, pending, and free slots. Grindstone penalties appear as dark red broken pips at the end. Scales to fit any slot count.
+Bottom (visual slot bar): pips show used, pending, and free slots. Scales to fit any slot count.
 
 ## Cost
 
 Each enchantment costs a specific reagent and XP levels:
-- Reagent: a thematic item specific to each enchantment. Base cost is 2 per level, reduced by normal bookshelves (up to 50% at 15 bookshelves).
+- Reagent: a thematic item specific to each enchantment. Each enchantment has its own cumulative price curve; see the [[reagent table|Enchantment List]]. Normal bookshelves reduce the price by up to 50% at 15 bookshelves, rounded up. Mending costs four Ghast Tears before discounts (two with 15 bookshelves); Silk Touch remains two Cobwebs (one with 15 bookshelves).
 - XP levels: 2 (level I), 4 (level II), 7 (level III), 10 (level IV+). Mending always costs 8 XP regardless of level.
 
 ### Example: Fortune III on Diamond Pickaxe (5 slots, 10 bookshelves)
 
 | Level | Slots | Reagent (Emerald) | Reagent (reduced) | XP |
 |---|---|---|---|---|
-| I | 1 | 2 | 2 | 2 levels |
-| II | 2 | 4 | 3 | 4 levels |
-| III | 3 | 6 | 4 | 7 levels |
+| I | 1 | 8 | 6 | 2 levels |
+| II | 2 | 20 | 14 | 4 levels |
+| III | 3 | 36 | 24 | 7 levels |
+
+These are cumulative prices. At ten bookshelves, upgrading Fortune I to II costs eight emeralds, and II to III costs ten. Including the six paid for level I, the total is 24, equal to applying level III directly. The tooltip shows the bookshelf discount separately from the exact reagent quantity charged.
 
 ## Curses
 
@@ -84,6 +86,4 @@ Curses cost 0 slots and grant +1 bonus slot instead. This is the primary way to 
 
 ## Grindstone
 
-Removes all enchantments but permanently reduces max slots by 1. Lost slots appear as dark red "broken" pips at the end of the slot bar. The anvil restores lost slots using the matching repair material (see [[Anvil and Grindstone]]).
-
-![Slot bar showing broken red pip from grindstone penalty](images/slot-bar-penalty.png)
+Removes all enchantments, curses included, and leaves every slot free (see [[Anvil and Grindstone]]).

@@ -43,10 +43,10 @@ No XP cost. The only cost is the template and the material. Any material higher 
 
 | Template | Attribute Changed |
 |---|---|
-| Honing | Base attack damage (stacks with the weapon's existing damage) |
-| Warding | Flat damage reduction (applied via armor calculation) |
-| Tempering | Effective durability (reduces durability loss) |
-| Grinding | Mining efficiency bonus (+5 per level) |
+| Honing | Base attack damage +1 / +1.5 / +2 / +2.5 / +3, like Sharpness. Bows and crossbows add it to each arrow, like Power |
+| Warding | 3.2% less damage per level, summed over every armor piece and capped at 64% (a full Warding V set) |
+| Tempering | Durability loss like Unbreaking I / I / II / II / III |
+| Grinding | Mining efficiency +2 / +5 / +10 / +17 / +26, like Efficiency |
 
 ## Visual Changes
 

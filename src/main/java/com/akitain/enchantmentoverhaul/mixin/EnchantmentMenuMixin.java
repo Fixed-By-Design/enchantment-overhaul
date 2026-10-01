@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EnchantmentMenu.class)
-public class EnchantmentScreenHandlerMixin {
+public class EnchantmentMenuMixin {
 
     @Inject(method = "clickMenuButton", at = @At("HEAD"), cancellable = true)
     private void disableEnchanting(Player player, int id, CallbackInfoReturnable<Boolean> cir) {

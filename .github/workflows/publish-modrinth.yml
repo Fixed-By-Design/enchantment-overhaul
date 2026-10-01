@@ -26,15 +26,21 @@ jobs:
           ./gradlew build
 
       # On a real release use the tag; on a manual dispatch fall back to the version in gradle.properties
-      # so the Modrinth version is never named after the branch.
+      # so the Modrinth version is never named after the branch. Pre-release versions (1.0.0-rc.1) publish as beta.
       - name: Resolve version
         id: ver
         run: |
           if [ -n "$TAG" ]; then
-            echo "value=${TAG#v}" >> "$GITHUB_OUTPUT"
+            version="${TAG#v}"
           else
-            echo "value=$(grep '^mod_version=' gradle.properties | cut -d= -f2)-beta+26.1" >> "$GITHUB_OUTPUT"
+            version="$(grep '^mod_version=' gradle.properties | cut -d= -f2)+26.1"
           fi
+          echo "value=$version" >> "$GITHUB_OUTPUT"
+          case "${version%%+*}" in
+            *-alpha*) echo "type=alpha" >> "$GITHUB_OUTPUT" ;;
+            *-*) echo "type=beta" >> "$GITHUB_OUTPUT" ;;
+            *) echo "type=release" >> "$GITHUB_OUTPUT" ;;
+          esac
         env:
           TAG: ${{ github.event.release.tag_name }}
 
@@ -47,7 +53,7 @@ jobs:
           files: build/libs/!(*-sources).jar
           name: Enchantment Overhaul ${{ steps.ver.outputs.value }}
           version: ${{ steps.ver.outputs.value }}
-          version-type: beta
+          version-type: ${{ steps.ver.outputs.type }}
           loaders: fabric
           game-versions: |
             26.1

@@ -1,11 +1,9 @@
 package com.akitain.enchantmentoverhaul.enchant;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 public final class LegendaryItems {
 
@@ -14,17 +12,8 @@ public final class LegendaryItems {
     private LegendaryItems() {}
 
     public static boolean isLegendary(ItemStack stack) {
-        ItemEnchantments enchantments = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
-        if (enchantments.isEmpty()) return false;
-
-        boolean venom = false;
-        boolean fireAspect = false;
-        for (var entry : enchantments.entrySet()) {
-            if (entry.getKey().is(ModEnchantments.VENOM)) venom = true;
-            if (entry.getKey().is(Enchantments.FIRE_ASPECT)) fireAspect = true;
-            if (venom && fireAspect) return true;
-        }
-        return false;
+        return ModEnchantmentHelper.hasEnchantment(ModEnchantments.VENOM, stack)
+                && ModEnchantmentHelper.hasEnchantment(Enchantments.FIRE_ASPECT, stack);
     }
 
     public static Component tooltip() {

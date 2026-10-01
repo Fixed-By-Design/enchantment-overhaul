@@ -63,5 +63,21 @@
   "gamerule.enchantment-overhaul.honing_on_axes": "Allow Honing on axes",
   "gamerule.enchantment-overhaul.enchanting_xp_cost": "Enchanting costs XP levels",
   "enchantment.enchantment-overhaul.parry": "Parry",
-  "enchantment.enchantment-overhaul.parry.desc": "Block just as the blow lands to knock the attacker back and take no durability damage."
+  "enchantment.enchantment-overhaul.parry.desc": "Block just as the blow lands to knock the attacker back and take no durability damage.",
+  "upgrade.enchantment-overhaul.honing": "Honing",
+  "upgrade.enchantment-overhaul.warding": "Warding",
+  "upgrade.enchantment-overhaul.tempering": "Tempering",
+  "upgrade.enchantment-overhaul.grinding": "Grinding",
+  "innate_resistance.enchantment-overhaul.fire": "Fire Resistance",
+  "innate_resistance.enchantment-overhaul.explosion": "Explosion Resistance",
+  "innate_resistance.enchantment-overhaul.poison": "Poison Resistance",
+  "innate_resistance.enchantment-overhaul.projectile": "Projectile Resistance",
+  "innate_resistance.enchantment-overhaul.magic": "Magic Resistance",
+  "innate_resistance.enchantment-overhaul.fall": "Fall Resistance",
+  "item.enchantment-overhaul.innate_resistance": "%s (%s%% per piece)",
+  "screen.enchantment-overhaul.catalogue.insert_item": "Insert item",
+  "screen.enchantment-overhaul.catalogue.no_enchantments": "Unlock enchantments with bookshelves",
+  "commands.enchantment-overhaul.upgrade.success": "Applied %s to held item",
+  "commands.enchantment-overhaul.upgrade.failed.itemless": "Hold an item to upgrade",
+  "commands.enchantment-overhaul.upgrade.failed.incompatible": "%s cannot be applied to this item"
 }
