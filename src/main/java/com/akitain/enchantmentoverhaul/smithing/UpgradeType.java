@@ -30,7 +30,9 @@ public enum UpgradeType implements StringRepresentable {
     GRINDING("grinding", ModComponents.GRINDING_LEVEL, "grindable");
 
     public static final int MAX_LEVEL = 5;
-    private static final Identifier GRINDING_MODIFIER_ID = Identifier.withDefaultNamespace("grinding");
+    private static final Identifier GRINDING_MODIFIER_ID = Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "grinding");
+    // Items ground before the modifier was namespaced still carry this id; it is replaced on the next upgrade.
+    private static final Identifier LEGACY_GRINDING_MODIFIER_ID = Identifier.withDefaultNamespace("grinding");
 
     private final String name;
     private final DataComponentType<Integer> component;
@@ -113,7 +115,7 @@ public enum UpgradeType implements StringRepresentable {
     private static void setMiningEfficiencyBonus(ItemStack stack, double bonus) {
         ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
         for (ItemAttributeModifiers.Entry entry : stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY).modifiers()) {
-            if (entry.modifier().is(GRINDING_MODIFIER_ID)) continue;
+            if (entry.modifier().is(GRINDING_MODIFIER_ID) || entry.modifier().is(LEGACY_GRINDING_MODIFIER_ID)) continue;
             builder.add(entry.attribute(), entry.modifier(), entry.slot(), entry.display());
         }
         builder.add(Attributes.MINING_EFFICIENCY, new AttributeModifier(GRINDING_MODIFIER_ID, bonus, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
