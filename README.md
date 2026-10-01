@@ -10,7 +10,7 @@ Vanilla enchanting mixes stat boosts with magical effects in a single RNG system
 - **Innate Material Properties** give armor specialized defenses based on what it's made of.
 - **Enchanting Table** is reserved for magical effects, unlocked by placing enchanted books in chiseled bookshelves, paid with a reagent + XP, and limited by a slot system tied to item material.
 
-The mod adds 6 new enchantments, reworks the anvil into a maintenance station, and curates enchanted book loot across all structures.
+The mod adds 9 new enchantments, reworks the anvil into a maintenance station that repairs every tool with a material, and curates enchanted book loot across all structures.
 
 ## Documentation
 
@@ -25,7 +25,7 @@ See the [Wiki](https://github.com/Aqu1tain/enchantment-overhaul/wiki) for detail
 ## Requirements
 
 - Minecraft 26.1.2
-- Fabric Loader >= 0.18.6
+- Fabric Loader >= 0.18.4
 - Fabric API
 
 ## Development

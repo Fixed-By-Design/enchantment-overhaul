@@ -10,7 +10,7 @@ New to the mod? Start with the [[Getting Started]] guide.
 
 [[Smithing Table]]: Sharpness, Protection, Unbreaking, and Efficiency are replaced by four smithing templates. Upgrade weapons and armor with Copper through Netherite ingots for predictable stat boosts.
 
-[[Innate Material Properties]]: Each armor material has a built-in resistance. Copper resists fire. Iron blocks projectiles. Diamond tanks explosions. Gold resists magic. 5% per piece, 20% for a full set.
+[[Innate Material Properties]]: Each armor material has a built-in resistance. Netherite resists fire, copper poison, iron projectiles, diamond explosions, gold magic and leather falls. 5% per piece, 20% for a full set.
 
 [[Enchanting Table]]: The enchanting table opens a catalogue UI. Place enchanted books in nearby chiseled bookshelves to make enchantments permanently available. Pay with a thematic reagent and XP. A per-item slot system forces meaningful tradeoffs.
 
@@ -23,7 +23,7 @@ New to the mod? Start with the [[Getting Started]] guide.
 
 ## Mechanics
 
-- [[Anvil and Grindstone]]: repair, rename, enchantment removal
+- [[Anvil and Grindstone]]: repair any tool with a material, rename, remove enchantments
 - [[Mob Equipment]]: difficulty-scaled enchantments and upgrades on mob gear
 - [[Advancements]]: six custom advancements
 

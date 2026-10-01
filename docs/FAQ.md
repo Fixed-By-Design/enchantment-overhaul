@@ -34,7 +34,7 @@ Warding and Tempering upgrades applied at the [[Smithing Table]] show as visible
 
 ## Does the mod work with other enchanting mods?
 
-The mod completely replaces the vanilla enchanting table UI. Mods adding enchantments to the vanilla system will be suppressed unless they are registered through the catalogue. Mods adding new items or armor materials need their slot counts configured separately.
+The mod completely replaces the vanilla enchanting table UI. Enchantments added by other mods show up in the catalogue like vanilla ones once their book sits in a nearby chiseled bookshelf, and cost lapis lazuli unless a reagent is defined for them. Modded items get 3 slots by default; add them to the `enchantment-overhaul:slots/tier_3` to `tier_6` item tags to change that.
 
 ## Chiseled bookshelves vs. normal bookshelves?
 

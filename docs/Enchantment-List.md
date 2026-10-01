@@ -1,6 +1,6 @@
 # Enchantment List
 
-## Vanilla Enchantments Kept (24)
+## Vanilla Enchantments Kept (31)
 
 | Enchantment | Max | Item | Effect |
 |---|---|---|---|
@@ -36,17 +36,18 @@
 | Mending | I (3 slots) | Any | XP repairs item |
 | Lure | III | Fishing Rod | Faster fish bite |
 
-## New Enchantments (8)
+## New Enchantments (9)
 
 | Enchantment | Max | Item | Effect |
 |---|---|---|---|
-| Veil | I | Helmet | Mobs detect at 25% of their base follow range, nametag hidden to other players |
+| Veil | I | Helmet | Mobs detect at 25% of their base follow range, nametag hidden behind walls |
 | Last Stand | III | Chestplate | Below 20% HP, -10% damage taken per level |
 | Step-Up | I | Boots | Adds 0.4 to step height (0.6 to 1.0), walk up full blocks without jumping. Disabled while sneaking. |
 | Venom | II | Sword/Spear | Apply Poison on hit |
 | Burnishing | I | Axe | Right-click weathering copper to strip all oxidation in one click; the axe loses durability equal to the stages skipped |
 | Wraith | I | Armor | The enchanted piece is hidden while the wearer has Invisibility (per piece) |
 | Curse of Fragility | I | Any | Double durability damage, +1 slot |
+| Parry | I | Shield | Blocking within 15 ticks of raising the shield knocks the attacker back and costs no durability |
 | Curse of Hunger | I | Armor | +30% hunger per piece, +1 slot |
 
 ## Disabled Enchantments (12)
@@ -56,7 +57,7 @@ These are replaced by the [[Smithing Table]] or [[Innate Material Properties]] s
 | Enchantment | Replaced By |
 |---|---|
 | Protection | Smithing (Warding) |
-| Fire Protection | Innate (Copper/Netherite) |
+| Fire Protection | Innate (Netherite) |
 | Blast Protection | Innate (Diamond) |
 | Projectile Protection | Innate (Iron/Chainmail) |
 | Sharpness | Smithing (Honing) |
@@ -117,12 +118,12 @@ Values separated by `/` are **cumulative costs from an unenchanted item** for le
 | Wraith | Phantom Membrane | 2 | 1 |
 | Parry | Iron Bars | 4 | 2 |
 
-Mending still costs eight XP levels and three enchantment slots. Silk Touch keeps its cobweb reagent and its original price. Existing enchanted items are not changed; the new costs apply to future enchanting and upgrades.
+Mending also costs eight XP levels and three enchantment slots.
 
 Enchantments from other mods without a defined reagent use lapis lazuli at the original base cost of two per level. If a datapack raises the maximum level of a listed enchantment, its price continues using the final increment in that enchantment's table.
 
 ## Enchanted Book Display
 
-Enchanted books display as "<Enchantment> Book" in light purple (e.g., "Flame Book", "Sharpness V Book"). Cursed books show in red. The original "Enchanted Book" label appears as a gray italic subtitle in the tooltip.
+Enchanted books display as "<Enchantment> Book" in light purple (e.g., "Flame Book", "Fortune III Book"). Cursed books show in red. The original "Enchanted Book" label appears as a gray italic subtitle in the tooltip.
 
 ![Fortune Book tooltip](images/book-tooltip.png)

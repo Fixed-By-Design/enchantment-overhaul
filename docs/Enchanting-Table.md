@@ -39,7 +39,7 @@ Normal bookshelves reduce reagent cost. The discount is linear: each bookshelf r
 
 ## Upgrading Enchantments
 
-You can raise an enchantment already on an item to a higher level without stripping it first. An applied enchantment that is below its max level appears in the catalogue with its owned levels shown as greyed, non-clickable pips, and only the next levels selectable. The tooltip reads "N to M".
+You can raise an enchantment already on an item to a higher level without stripping it first. An applied enchantment that is below its max level appears in the catalogue with its owned levels shown as greyed, non-clickable pips, and only the next levels selectable. The tooltip reads "N → M".
 
 The cost is the delta: slots, reagent, and XP are charged as the new level minus the current level, so reaching a level costs the same total whether you applied it directly or upgraded into it, with the same number of bookshelves. Reagent costs are rounded before taking the difference. Curses and single-level enchantments are not upgradeable.
 
@@ -53,7 +53,7 @@ The vanilla Stronghold Library has been remodeled into a starter enchanting room
 
 Left side (3 slots): item on top, reagent beside it, result on the bottom.
 
-Right side (scrollable catalogue): each row shows the enchantment name and a level selector (I, II, III...). Hovering shows the reagent cost, XP cost, and slot cost. Unaffordable rows and level buttons appear dimmed and are not clickable.
+Right side (scrollable catalogue): each row shows the enchantment in the enchanting table's runic script and a level selector (I, II, III...). Hovering shows the enchantment's name with its reagent, XP, and slot costs. Unaffordable rows and level buttons appear dimmed and are not clickable. A selected level stays selected while you add or swap reagents, and the result appears as soon as you can pay.
 
 Bottom (visual slot bar): pips show used, pending, and free slots. Scales to fit any slot count.
 

@@ -6,18 +6,21 @@ Specialized protections are intrinsic properties of armor materials, not enchant
 
 | Material | Resistance | Damage Types |
 |---|---|---|
-| Copper | Fire | Fire, lava, magma blocks |
 | Netherite | Fire | Fire, lava, magma blocks |
+| Copper | Poison | Poison, harming potions |
 | Iron | Projectiles | Arrows, tridents, shulker bullets |
 | Chainmail | Projectiles | Arrows, tridents, shulker bullets |
 | Diamond | Explosions | Creepers, TNT, beds, respawn anchors |
-| Gold | Magic | Potions, Evoker fangs, Warden sonic boom |
+| Gold | Magic | Poison, harming potions, Evoker fangs, Wither, dragon's breath |
+| Leather | Falls | Fall damage |
 
-Leather has no innate resistance.
+Rose gold armor from Additional Additions resists explosions like diamond.
+
+The armor tooltip shows its resistance, for example "Fire Resistance (5% per piece)".
 
 ## Netherite
 
-Netherite armor shares its fire resistance with Copper. On top of the innate 5% per piece damage reduction, Netherite keeps its vanilla properties: items do not burn in lava, and the knockback resistance bonus remains. A full Netherite set gives 20% fire damage reduction from the innate system plus the best base armor value in the game. Netherite is the only material combining high defense with an innate resistance.
+Netherite is the only material that resists fire. On top of the innate 5% per piece damage reduction, it keeps its vanilla properties: items do not burn in lava, and the knockback resistance bonus remains. A full set gives 20% fire damage reduction from the innate system plus the best base armor value in the game.
 
 ## Stacking Formula
 

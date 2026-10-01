@@ -17,6 +17,8 @@ The anvil is a maintenance station. Enchantment combining has been removed. Book
 
 Place the item in the left slot and its repair material in the right slot. Each material restores a quarter of the item's durability, and the whole repair costs 1 XP level. Any material added by tags, datapacks, or other mods works too.
 
+![Anvil repairing a bow with string](images/anvil-repair.png)
+
 | Item Material | Repair Material |
 |---|---|
 | Netherite | Netherite Ingot or Diamond |
