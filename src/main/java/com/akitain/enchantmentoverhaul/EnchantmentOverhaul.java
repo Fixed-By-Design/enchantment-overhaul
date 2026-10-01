@@ -2,7 +2,7 @@ package com.akitain.enchantmentoverhaul;
 
 import com.akitain.enchantmentoverhaul.component.ModComponents;
 import com.akitain.enchantmentoverhaul.command.UpgradeCommand;
-import com.akitain.enchantmentoverhaul.enchant.ModScreenHandlers;
+import com.akitain.enchantmentoverhaul.enchant.ModMenus;
 import com.akitain.enchantmentoverhaul.gamerule.ModGameRules;
 import com.akitain.enchantmentoverhaul.loot.LootTableModifier;
 import com.akitain.enchantmentoverhaul.smithing.SmithingTemplates;
@@ -21,7 +21,7 @@ public class EnchantmentOverhaul implements ModInitializer {
     @Override
     public void onInitialize() {
         ModComponents.register();
-        ModScreenHandlers.register();
+        ModMenus.register();
         SmithingTemplates.register();
         ModGameRules.register();
         UpgradeCommand.register();

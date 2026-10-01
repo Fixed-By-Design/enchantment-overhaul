@@ -3,7 +3,7 @@ package com.akitain.enchantmentoverhaul.mixin;
 import com.akitain.enchantmentoverhaul.enchant.BookshelfScanner;
 import com.akitain.enchantmentoverhaul.gamerule.ModGameRules;
 import com.akitain.enchantmentoverhaul.enchant.CatalogueData;
-import com.akitain.enchantmentoverhaul.enchant.CatalogueScreenHandler;
+import com.akitain.enchantmentoverhaul.enchant.CatalogueMenu;
 import com.akitain.enchantmentoverhaul.enchant.ModAdvancements;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.minecraft.core.BlockPos;
@@ -64,7 +64,7 @@ public class EnchantingTableBlockMixin {
 
             @Override
             public AbstractContainerMenu createMenu(int syncId, Inventory inv, Player p) {
-                return new CatalogueScreenHandler(syncId, inv, ContainerLevelAccess.create(world, pos), unlocked, bookshelves, xpCostEnabled);
+                return new CatalogueMenu(syncId, inv, ContainerLevelAccess.create(world, pos), unlocked, bookshelves, xpCostEnabled);
             }
         });
 

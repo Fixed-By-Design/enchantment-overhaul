@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(GrindstoneMenu.class)
-public class GrindstoneScreenHandlerMixin {
+public class GrindstoneMenuMixin {
 
     @Inject(method = "removeNonCursesFrom", at = @At("RETURN"))
     private void applySlotPenalty(ItemStack item, CallbackInfoReturnable<ItemStack> cir) {

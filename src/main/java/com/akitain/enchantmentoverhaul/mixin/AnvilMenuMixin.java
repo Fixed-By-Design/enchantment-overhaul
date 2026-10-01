@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AnvilMenu.class)
-public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
+public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 
     @Shadow @Nullable private String itemName;
     @Shadow @Final private DataSlot cost;
@@ -35,7 +35,7 @@ public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
     @Unique
     private static final boolean EASY_ANVILS = FabricLoader.getInstance().isModLoaded("easyanvils");
 
-    private AnvilScreenHandlerMixin(@Nullable MenuType<?> type, int syncId, Inventory playerInventory, ContainerLevelAccess context, ItemCombinerMenuSlotDefinition forgingSlotsManager) {
+    private AnvilMenuMixin(@Nullable MenuType<?> type, int syncId, Inventory playerInventory, ContainerLevelAccess context, ItemCombinerMenuSlotDefinition forgingSlotsManager) {
         super(type, syncId, playerInventory, context, forgingSlotsManager);
     }
 

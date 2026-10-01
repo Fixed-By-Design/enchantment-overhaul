@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EnchantRandomlyFunction.class)
-public class EnchantRandomlyLootFunctionMixin {
+public class EnchantRandomlyFunctionMixin {
 
     @Inject(method = "run", at = @At("HEAD"), cancellable = true)
     private void disableRandomLootEnchanting(ItemStack stack, LootContext context, CallbackInfoReturnable<ItemStack> cir) {

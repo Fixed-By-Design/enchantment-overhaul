@@ -27,13 +27,13 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.Blocks;
 
-public class CatalogueScreenHandler extends AbstractContainerMenu {
+public class CatalogueMenu extends AbstractContainerMenu {
 
     private final Container inputInventory = new SimpleContainer(2) {
         @Override
         public void setChanged() {
             super.setChanged();
-            CatalogueScreenHandler.this.slotsChanged(this);
+            CatalogueMenu.this.slotsChanged(this);
         }
     };
     private final Container outputInventory = new SimpleContainer(1);
@@ -49,13 +49,13 @@ public class CatalogueScreenHandler extends AbstractContainerMenu {
     private int selectedIndex = -1;
     private int selectedLevel = 1;
 
-    public static CatalogueScreenHandler fromData(int syncId, Inventory playerInventory, CatalogueData data) {
-        return new CatalogueScreenHandler(syncId, playerInventory, ContainerLevelAccess.NULL, data.unlocked(), data.normalBookshelves(), data.xpCostEnabled());
+    public static CatalogueMenu fromData(int syncId, Inventory playerInventory, CatalogueData data) {
+        return new CatalogueMenu(syncId, playerInventory, ContainerLevelAccess.NULL, data.unlocked(), data.normalBookshelves(), data.xpCostEnabled());
     }
 
-    public CatalogueScreenHandler(int syncId, Inventory playerInventory, ContainerLevelAccess context,
+    public CatalogueMenu(int syncId, Inventory playerInventory, ContainerLevelAccess context,
                                    List<Identifier> unlocked, int normalBookshelves, boolean xpCostEnabled) {
-        super(ModScreenHandlers.CATALOGUE, syncId);
+        super(ModMenus.CATALOGUE, syncId);
         this.context = context;
         this.player = playerInventory.player;
         this.registryManager = playerInventory.player.registryAccess();
@@ -80,12 +80,12 @@ public class CatalogueScreenHandler extends AbstractContainerMenu {
 
             @Override
             public boolean mayPickup(Player player) {
-                return CatalogueScreenHandler.this.canTakeOutput(player);
+                return CatalogueMenu.this.canTakeOutput(player);
             }
 
             @Override
             public void onTake(Player player, ItemStack stack) {
-                CatalogueScreenHandler.this.onOutputTaken(player);
+                CatalogueMenu.this.onOutputTaken(player);
                 super.onTake(player, stack);
             }
         });

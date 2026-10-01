@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(Mob.class)
-public class MobEntityMixin {
+public class MobMixin {
 
     @Inject(method = "populateDefaultEquipmentEnchantments", at = @At("HEAD"), cancellable = true)
     protected void overrideMobEnchantments(ServerLevelAccessor world, RandomSource random, DifficultyInstance localDifficulty, CallbackInfo ci) {

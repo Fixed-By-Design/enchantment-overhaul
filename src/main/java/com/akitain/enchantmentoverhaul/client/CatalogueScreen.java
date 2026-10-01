@@ -2,8 +2,8 @@ package com.akitain.enchantmentoverhaul.client;
 
 import com.akitain.enchantmentoverhaul.EnchantmentOverhaul;
 import com.akitain.enchantmentoverhaul.enchant.BookshelfScanner;
-import com.akitain.enchantmentoverhaul.enchant.CatalogueScreenHandler;
-import com.akitain.enchantmentoverhaul.enchant.CatalogueScreenHandler.CatalogueEntry;
+import com.akitain.enchantmentoverhaul.enchant.CatalogueMenu;
+import com.akitain.enchantmentoverhaul.enchant.CatalogueMenu.CatalogueEntry;
 import com.akitain.enchantmentoverhaul.enchant.EnchantmentCosts;
 import com.akitain.enchantmentoverhaul.enchant.SlotSystem;
 import net.fabricmc.api.EnvType;
@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Random;
 
 @Environment(EnvType.CLIENT)
-public class CatalogueScreen extends AbstractContainerScreen<CatalogueScreenHandler> {
+public class CatalogueScreen extends AbstractContainerScreen<CatalogueMenu> {
 
     private static final int BG_W = 176;
     private static final int BG_H = 200;
@@ -114,7 +114,7 @@ public class CatalogueScreen extends AbstractContainerScreen<CatalogueScreenHand
     private boolean scrolling;
     private ItemStack lastItem = ItemStack.EMPTY;
 
-    public CatalogueScreen(CatalogueScreenHandler handler, Inventory inventory, Component title) {
+    public CatalogueScreen(CatalogueMenu handler, Inventory inventory, Component title) {
         super(handler, inventory, title, BG_W, BG_H);
         this.inventoryLabelX = 7;
         this.inventoryLabelY = 110;

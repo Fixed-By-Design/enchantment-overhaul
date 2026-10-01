@@ -3,7 +3,7 @@ package com.akitain.enchantmentoverhaul;
 import com.akitain.enchantmentoverhaul.client.CatalogueScreen;
 import com.akitain.enchantmentoverhaul.client.ChiseledBookshelfHoverState;
 import com.akitain.enchantmentoverhaul.enchant.InnateMaterialProperties;
-import com.akitain.enchantmentoverhaul.enchant.ModScreenHandlers;
+import com.akitain.enchantmentoverhaul.enchant.ModMenus;
 import com.akitain.enchantmentoverhaul.smithing.UpgradeType;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -17,7 +17,7 @@ public class EnchantmentOverhaulClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        MenuScreens.register(ModScreenHandlers.CATALOGUE, CatalogueScreen::new);
+        MenuScreens.register(ModMenus.CATALOGUE, CatalogueScreen::new);
 
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
             addUpgradeLines(stack, lines);

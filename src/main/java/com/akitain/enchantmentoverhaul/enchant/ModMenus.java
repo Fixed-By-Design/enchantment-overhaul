@@ -6,10 +6,10 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 
-public class ModScreenHandlers {
+public class ModMenus {
 
-    public static final ExtendedMenuType<CatalogueScreenHandler, CatalogueData> CATALOGUE =
-            new ExtendedMenuType<>(CatalogueScreenHandler::fromData, CatalogueData.PACKET_CODEC);
+    public static final ExtendedMenuType<CatalogueMenu, CatalogueData> CATALOGUE =
+            new ExtendedMenuType<>(CatalogueMenu::fromData, CatalogueData.PACKET_CODEC);
 
     public static void register() {
         Registry.register(BuiltInRegistries.MENU, Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "catalogue"), CATALOGUE);
