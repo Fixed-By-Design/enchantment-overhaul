@@ -20,6 +20,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BookshelfScanner {
 
+    public static final int MAX_DISCOUNT_BOOKSHELVES = 15;
+
     public record ScanResult(Set<ResourceKey<Enchantment>> unlocked, int normalBookshelves) {}
 
     public static ScanResult scan(Level level, BlockPos tablePos) {
@@ -60,7 +62,7 @@ public class BookshelfScanner {
     }
 
     public static double reagentDiscount(int normalBookshelves) {
-        int capped = Math.min(normalBookshelves, 15);
-        return capped * (0.5 / 15.0);
+        int capped = Math.clamp(normalBookshelves, 0, MAX_DISCOUNT_BOOKSHELVES);
+        return capped * (0.5 / MAX_DISCOUNT_BOOKSHELVES);
     }
 }

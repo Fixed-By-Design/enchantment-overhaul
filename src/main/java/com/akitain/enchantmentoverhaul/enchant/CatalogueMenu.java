@@ -197,7 +197,7 @@ public class CatalogueMenu extends AbstractContainerMenu {
     }
 
     public int reagentCost(CatalogueEntry entry, int level) {
-        return EnchantmentCosts.reagentCost(level, entry.currentLevel(), this.bookshelves);
+        return EnchantmentCosts.reagentCost(entry.key(), level, entry.currentLevel(), this.bookshelves);
     }
 
     public int xpCost(CatalogueEntry entry, int level) {

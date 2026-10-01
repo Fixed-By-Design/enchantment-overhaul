@@ -70,49 +70,56 @@ These are replaced by the [[Smithing Table]] or [[Innate Material Properties]] s
 
 ## Reagent Table
 
-Each enchantment requires a specific reagent item in the [[Enchanting Table]] alongside XP. Base cost is 2 reagents per level, reduced up to 50% by surrounding normal bookshelves.
+Each enchantment requires a specific reagent alongside XP. Costs now depend on the enchantment rather than only its level. Normal bookshelves reduce these costs by up to 50%; the final quantity is rounded up.
 
-| Enchantment | Reagent |
-|---|---|
-| Fire Aspect | Blaze Powder |
-| Flame | Blaze Powder |
-| Channeling | Lightning Rod |
-| Frost Walker | Packed Ice |
-| Thorns | Cactus |
-| Fortune | Emerald |
-| Looting | Rabbit Foot |
-| Silk Touch | Cobweb |
-| Luck of the Sea | Nautilus Shell |
-| Infinity | Spectral Arrow |
-| Depth Strider | Prismarine Shard |
-| Soul Speed | Soul Sand |
-| Swift Sneak | Echo Shard |
-| Riptide | Heart of the Sea |
-| Loyalty | Chain |
-| Multishot | Firework Rocket |
-| Piercing | Arrow |
-| Wind Burst | Breeze Rod |
-| Breach | Breeze Rod |
-| Respiration | Pufferfish |
-| Aqua Affinity | Prismarine Crystals |
-| Sweeping Edge | Iron Nugget |
-| Knockback | Piston |
-| Punch | Snowball |
-| Lunge | Slime Ball |
-| Feather Falling | Feather |
-| Quick Charge | String |
-| Lure | Tropical Fish |
-| Mending | Lapis Lazuli |
-| Veil | Fermented Spider Eye |
-| Last Stand | Golden Apple |
-| Step-Up | Rabbit Foot |
-| Venom | Spider Eye |
-| Burnishing | Honeycomb |
-| Wraith | Phantom Membrane |
-| Curse of Fragility | Glass Pane |
-| Curse of Hunger | Rotten Flesh |
-| Curse of Binding | Chain |
-| Curse of Vanishing | Phantom Membrane |
+Values separated by `/` are **cumulative costs from an unenchanted item** for levels I / II / III / IV. Upgrades pay only the difference between the rounded costs of the target and current levels, using the same bookshelf count.
+
+| Enchantment | Reagent | No bookshelves | 15 bookshelves |
+|---|---|---|---|
+| Fire Aspect | Blaze Powder | 4 / 8 | 2 / 4 |
+| Flame | Blaze Powder | 4 | 2 |
+| Channeling | Lightning Rod | 2 | 1 |
+| Frost Walker | Packed Ice | 4 / 8 | 2 / 4 |
+| Thorns | Cactus | 8 / 16 / 24 | 4 / 8 / 12 |
+| Fortune | Emerald | 8 / 20 / 36 | 4 / 10 / 18 |
+| Looting | Ender Pearl | 4 / 8 / 12 | 2 / 4 / 6 |
+| Silk Touch | Cobweb | 2 | 1 |
+| Luck Of The Sea | Nautilus Shell | 2 / 4 / 6 | 1 / 2 / 3 |
+| Infinity | Amethyst Shard | 16 | 8 |
+| Depth Strider | Prismarine Shard | 4 / 8 / 12 | 2 / 4 / 6 |
+| Soul Speed | Soul Sand | 4 / 8 / 12 | 2 / 4 / 6 |
+| Swift Sneak | Amethyst Shard | 8 / 16 / 24 | 4 / 8 / 12 |
+| Riptide | Prismarine Crystals | 4 / 8 / 12 | 2 / 4 / 6 |
+| Loyalty | Iron Chain | 2 / 4 / 6 | 1 / 2 / 3 |
+| Multishot | Firework Rocket | 4 | 2 |
+| Piercing | Arrow | 8 / 16 / 24 / 32 | 4 / 8 / 12 / 16 |
+| Wind Burst | Breeze Rod | 2 / 4 / 6 | 1 / 2 / 3 |
+| Respiration | Pufferfish | 2 / 4 / 6 | 1 / 2 / 3 |
+| Aqua Affinity | Prismarine Crystals | 2 | 1 |
+| Sweeping Edge | Iron Ingot | 2 / 4 / 6 | 1 / 2 / 3 |
+| Breach | Breeze Rod | 2 / 4 / 6 / 8 | 1 / 2 / 3 / 4 |
+| Knockback | Piston | 2 / 4 | 1 / 2 |
+| Punch | Snowball | 4 / 8 | 2 / 4 |
+| Lunge | Slime Ball | 4 / 8 / 12 | 2 / 4 / 6 |
+| Feather Falling | Feather | 4 / 8 / 12 / 16 | 2 / 4 / 6 / 8 |
+| Quick Charge | Redstone | 4 / 8 / 12 | 2 / 4 / 6 |
+| Lure | Tropical Fish | 2 / 4 / 6 | 1 / 2 / 3 |
+| Mending | Ghast Tear | 4 | 2 |
+| Curse of Binding | Iron Chain | 2 | 1 |
+| Curse of Vanishing | Phantom Membrane | 2 | 1 |
+| Step-Up | Rabbit Foot | 2 | 1 |
+| Venom | Spider Eye | 4 / 8 | 2 / 4 |
+| Last Stand | Golden Apple | 2 / 4 / 6 | 1 / 2 / 3 |
+| Curse of Fragility | Glass Pane | 2 | 1 |
+| Curse of Hunger | Rotten Flesh | 2 | 1 |
+| Veil | Fermented Spider Eye | 4 | 2 |
+| Burnishing | Honeycomb | 4 | 2 |
+| Wraith | Phantom Membrane | 2 | 1 |
+| Parry | Iron Bars | 2 | 1 |
+
+Mending still costs eight XP levels and three enchantment slots. Silk Touch keeps its cobweb reagent and its original price. Existing enchanted items are not changed; the new costs apply to future enchanting and upgrades.
+
+Enchantments from other mods without a defined reagent use lapis lazuli at the original base cost of two per level. If a datapack raises the maximum level of a listed enchantment, its price continues using the final increment in that enchantment's table.
 
 ## Enchanted Book Display
 
