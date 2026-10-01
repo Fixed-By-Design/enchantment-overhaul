@@ -81,17 +81,13 @@ public class EnchantmentCosts {
         return REAGENTS.containsValue(item);
     }
 
-    public static int slotCost(Holder<Enchantment> entry, int level) {
-        if (entry.is(EnchantmentTags.CURSE)) return 0;
-        if (entry.is(Enchantments.MENDING)) return 3;
-        return level;
+    public static int slotCost(Holder<Enchantment> enchantment, int level) {
+        if (level <= 0 || enchantment.is(EnchantmentTags.CURSE)) return 0;
+        return enchantment.is(Enchantments.MENDING) ? 3 : level;
     }
 
-    public static int slotCost(Holder<Enchantment> entry, int newLevel, int oldLevel) {
-        if (oldLevel <= 0) return slotCost(entry, newLevel);
-        if (entry.is(EnchantmentTags.CURSE)) return 0;
-        if (entry.is(Enchantments.MENDING)) return 0;
-        return Math.max(0, newLevel - oldLevel);
+    public static int slotCost(Holder<Enchantment> enchantment, int newLevel, int oldLevel) {
+        return Math.max(0, slotCost(enchantment, newLevel) - slotCost(enchantment, oldLevel));
     }
 
     public static int reagentCost(int newLevel, int oldLevel, int normalBookshelves) {

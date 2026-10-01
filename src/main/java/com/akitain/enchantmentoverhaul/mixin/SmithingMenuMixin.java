@@ -23,47 +23,35 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class SmithingMenuMixin extends ItemCombinerMenu {
 
     @Unique
-    private @Nullable UpgradeType pendingType;
+    private @Nullable UpgradeType pendingUpgrade;
 
     private SmithingMenuMixin(@Nullable MenuType<?> menuType, int containerId, Inventory inventory, ContainerLevelAccess access, ItemCombinerMenuSlotDefinition slotDefinition) {
         super(menuType, containerId, inventory, access, slotDefinition);
     }
 
     @Inject(method = "createResult", at = @At("TAIL"))
-    private void applyCustomUpgrade(CallbackInfo ci) {
-        pendingType = null;
-
-        ItemStack template = this.inputSlots.getItem(0);
+    private void applyUpgrade(CallbackInfo ci) {
+        this.pendingUpgrade = null;
+        UpgradeType upgrade = SmithingTemplates.getUpgrade(this.inputSlots.getItem(0).getItem());
+        int level = SmithingTemplates.getMaterialLevel(this.inputSlots.getItem(2).getItem());
         ItemStack base = this.inputSlots.getItem(1);
-        ItemStack material = this.inputSlots.getItem(2);
+        if (upgrade == null || level == 0 || base.isEmpty()) return;
 
-        if (template.isEmpty() || base.isEmpty() || material.isEmpty()) return;
-
-        UpgradeType type = SmithingTemplates.getType(template.getItem());
-        if (type == null) return;
-
-        int level = SmithingTemplates.getMaterialLevel(material.getItem());
-        if (level == 0) return;
-        if (!type.appliesTo(base, this.player.level())) {
+        if (!upgrade.appliesTo(base, this.player.level()) || upgrade.currentLevel(base) >= level) {
             this.resultSlots.setItem(0, ItemStack.EMPTY);
             return;
         }
-        if (type.currentLevel(base) >= level) {
-            this.resultSlots.setItem(0, ItemStack.EMPTY);
-            return;
-        }
-
         ItemStack result = base.copy();
-        type.applyTo(result, level);
+        upgrade.applyTo(result, level);
         this.resultSlots.setItem(0, result);
-        pendingType = type;
+        this.pendingUpgrade = upgrade;
     }
 
     @Inject(method = "onTake", at = @At("HEAD"))
     private void grantAdvancement(Player player, ItemStack stack, CallbackInfo ci) {
-        if (pendingType != null && player instanceof ServerPlayer serverPlayer) {
-            ModAdvancements.grantSmithingAdvancement(serverPlayer, pendingType);
+        if (this.pendingUpgrade != null && player instanceof ServerPlayer serverPlayer) {
+            ModAdvancements.grantSmithingAdvancement(serverPlayer, this.pendingUpgrade);
         }
-        pendingType = null;
+        this.pendingUpgrade = null;
     }
 }

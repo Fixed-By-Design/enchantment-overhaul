@@ -3,8 +3,6 @@ package com.akitain.enchantmentoverhaul.enchant;
 import com.akitain.enchantmentoverhaul.EnchantmentOverhaul;
 import com.akitain.enchantmentoverhaul.component.ModComponents;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import java.util.Map;
-import java.util.Set;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -14,13 +12,11 @@ import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 public class SlotSystem {
 
-    // Slot budgets are data-driven: add an item to one of these tags to give it that many slots.
-    // The shipped tags reproduce the previous hardcoded values, so behaviour is unchanged out of the box.
+    // Slot budgets are data-driven: an item in enchantment-overhaul:slots/tier_N gets N slots.
     private static final int MIN_TIER = 3;
     private static final int MAX_TIER = 6;
     private static final int FALLBACK_SLOTS = 3;
@@ -58,13 +54,7 @@ public class SlotSystem {
     public static int getUsedSlots(ItemStack stack) {
         int used = 0;
         for (Object2IntMap.Entry<Holder<Enchantment>> entry : getEnchantments(stack).entrySet()) {
-            Holder<Enchantment> enchantment = entry.getKey();
-            int level = entry.getIntValue();
-
-            if (enchantment.is(EnchantmentTags.CURSE)) continue;
-            if (enchantment.is(Enchantments.MENDING)) { used += 3; continue; }
-
-            used += level;
+            used += EnchantmentCosts.slotCost(entry.getKey(), entry.getIntValue());
         }
         return used;
     }

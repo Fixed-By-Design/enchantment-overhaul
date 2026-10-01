@@ -24,15 +24,7 @@ public class ModAdvancements {
 
     public static void grantSmithingAdvancement(ServerPlayer player, UpgradeType type) {
         grant(player, "hammer_time", "requirement");
-
-        String criterion = switch (type) {
-            case HONING -> "honing";
-            case WARDING -> "warding";
-            case TEMPERING -> "tempering";
-            case GRINDING -> "grinding";
-        };
-        grant(player, "jack_of_all_trades", criterion);
-
+        grant(player, "jack_of_all_trades", type.getSerializedName());
         checkWalkingFortress(player);
     }
 

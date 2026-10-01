@@ -23,7 +23,7 @@ public class HoningProjectileMixin {
         if (honing <= 0) return;
         if (cir.getReturnValue() instanceof AbstractArrow arrow) {
             double base = ((AbstractArrowBaseDamageAccessor) arrow).eo$getBaseDamage();
-            arrow.setBaseDamage(base + UpgradeType.honingBonus(honing));
+            arrow.setBaseDamage(base + UpgradeType.honingDamageBonus(honing));
         }
     }
 }

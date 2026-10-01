@@ -8,23 +8,17 @@ import net.minecraft.world.level.gamerules.GameRuleCategory;
 
 public final class ModGameRules {
 
-    public static GameRule<Boolean> MOB_GEAR_ENCHANTMENTS;
-    public static GameRule<Boolean> HONING_ON_AXES;
-    public static GameRule<Boolean> ENCHANTING_XP_COST;
+    public static final GameRule<Boolean> MOB_GEAR_ENCHANTMENTS = register("mob_gear_enchantments", GameRuleCategory.MOBS, true);
+    public static final GameRule<Boolean> HONING_ON_AXES = register("honing_on_axes", GameRuleCategory.PLAYER, true);
+    public static final GameRule<Boolean> ENCHANTING_XP_COST = register("enchanting_xp_cost", GameRuleCategory.PLAYER, true);
 
     private ModGameRules() {}
 
-    public static void register() {
-        MOB_GEAR_ENCHANTMENTS = GameRuleBuilder.forBoolean(true)
-                .category(GameRuleCategory.MOBS)
-                .buildAndRegister(Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "mob_gear_enchantments"));
-
-        HONING_ON_AXES = GameRuleBuilder.forBoolean(true)
-                .category(GameRuleCategory.PLAYER)
-                .buildAndRegister(Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "honing_on_axes"));
-
-        ENCHANTING_XP_COST = GameRuleBuilder.forBoolean(true)
-                .category(GameRuleCategory.PLAYER)
-                .buildAndRegister(Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "enchanting_xp_cost"));
+    private static GameRule<Boolean> register(String name, GameRuleCategory category, boolean defaultValue) {
+        return GameRuleBuilder.forBoolean(defaultValue)
+                .category(category)
+                .buildAndRegister(Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, name));
     }
+
+    public static void bootstrap() {}
 }
