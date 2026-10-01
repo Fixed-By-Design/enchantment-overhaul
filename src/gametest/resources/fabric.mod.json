@@ -1,0 +1,13 @@
+{
+    "schemaVersion": 1,
+    "id": "enchantment-overhaul-gametest",
+    "version": "1.0.0",
+    "name": "Enchantment Overhaul Game Tests",
+    "environment": "*",
+    "entrypoints": {
+        "fabric-client-gametest": ["com.akitain.enchantmentoverhaul.gametest.EnchantmentOverhaulClientGameTest"]
+    },
+    "depends": {
+        "enchantment-overhaul": "*"
+    }
+}

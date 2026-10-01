@@ -30,6 +30,16 @@ loom {
 repositories {
 }
 
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = "enchantment-overhaul-gametest"
+        enableGameTests = false
+        enableClientGameTests = true
+        eula = true
+    }
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"

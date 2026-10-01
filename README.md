@@ -28,6 +28,10 @@ See the [Wiki](https://github.com/Aqu1tain/enchantment-overhaul/wiki) for detail
 - Fabric Loader >= 0.18.6
 - Fabric API
 
+## Development
+
+`./gradlew test` runs the unit tests. `./gradlew runClientGameTest` opens a game client, plays through the catalogue, anvil, grindstone, smithing table and equipment effects, and saves screenshots to `build/run/clientGameTest/screenshots`.
+
 ## Version support
 
 Enchantment Overhaul supports only the latest Minecraft version targeted by
