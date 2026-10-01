@@ -21,9 +21,10 @@ public class VeilDetectionMixin {
     @Shadow private double range;
     @Shadow private boolean testInvisible;
 
+    // A non-positive range means unlimited: scaling it would hide the wearer from every check, including retaliation.
     @Inject(method = "test", at = @At("HEAD"), cancellable = true)
     private void applyVeil(ServerLevel world, LivingEntity attacker, LivingEntity target, CallbackInfoReturnable<Boolean> cir) {
-        if (attacker == null || target == null) return;
+        if (attacker == null || target == null || this.range <= 0) return;
 
         ItemStack helmet = target.getItemBySlot(EquipmentSlot.HEAD);
         ItemEnchantments enchantments = helmet.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
