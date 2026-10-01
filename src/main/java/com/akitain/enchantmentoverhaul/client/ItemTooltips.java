@@ -43,14 +43,17 @@ public final class ItemTooltips {
                 .withStyle(ChatFormatting.DARK_AQUA));
     }
 
+    // The book is named after its first enchantment, so that line moves out of the list and a subtitle takes its place.
     private static void addEnchantedBookSubtitle(ItemStack stack, List<Component> lines) {
         ItemEnchantments enchantments = stack.get(DataComponents.STORED_ENCHANTMENTS);
         if (!stack.is(Items.ENCHANTED_BOOK) || enchantments == null || enchantments.isEmpty() || lines.isEmpty()) return;
 
-        for (Object2IntMap.Entry<Holder<Enchantment>> entry : enchantments.entrySet()) {
-            String fullname = Enchantment.getFullname(entry.getKey(), entry.getIntValue()).getString();
-            for (int i = lines.size() - 1; i >= 1; i--) {
-                if (lines.get(i).getString().equals(fullname)) lines.remove(i);
+        Object2IntMap.Entry<Holder<Enchantment>> named = enchantments.entrySet().iterator().next();
+        String namedLine = Enchantment.getFullname(named.getKey(), named.getIntValue()).getString();
+        for (int i = 1; i < lines.size(); i++) {
+            if (lines.get(i).getString().equals(namedLine)) {
+                lines.remove(i);
+                break;
             }
         }
         lines.add(1, ENCHANTED_BOOK_SUBTITLE);
