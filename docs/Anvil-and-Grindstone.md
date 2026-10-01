@@ -27,9 +27,15 @@ Place the item in the left slot and its repair material in the right slot. Each 
 | Leather | Leather |
 | Wood | Oak Planks |
 | Stone | Cobblestone |
-| Bow | String |
+| Bow / Crossbow / Fishing Rod | String |
+| Trident | Prismarine Shard |
+| Shears | Iron Ingot |
+| Flint and Steel | Flint |
+| Carrot on a Stick | Carrot |
+| Warped Fungus on a Stick | Warped Fungus |
+| Brush | Feather |
 
-The bow's repair material comes from the `enchantment-overhaul:repairs_bow` item tag.
+Vanilla repairs these last items only by combining two copies, which the anvil no longer allows. Their materials come from the `enchantment-overhaul:repairs_<item>` item tags, so datapacks can change them.
 
 ## Grindstone
 
