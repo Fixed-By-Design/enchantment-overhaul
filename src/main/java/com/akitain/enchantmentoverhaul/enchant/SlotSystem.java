@@ -77,12 +77,6 @@ public class SlotSystem {
         return getMaxSlots(stack) - getUsedSlots(stack);
     }
 
-    public static boolean canApplyEnchantment(ItemStack stack, Holder<Enchantment> enchantment, int level) {
-        int cost = enchantment.is(Enchantments.MENDING) ? 3 : level;
-        if (enchantment.is(EnchantmentTags.CURSE)) cost = 0;
-        return cost <= getAvailableSlots(stack);
-    }
-
     private static ItemEnchantments getEnchantments(ItemStack stack) {
         return stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
     }

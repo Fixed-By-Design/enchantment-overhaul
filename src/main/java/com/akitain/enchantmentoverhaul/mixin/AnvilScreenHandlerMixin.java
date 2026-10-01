@@ -14,9 +14,7 @@ import net.minecraft.world.inventory.ItemCombinerMenu;
 import net.minecraft.world.inventory.ItemCombinerMenuSlotDefinition;
 import net.minecraft.world.inventory.MenuType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -100,19 +98,6 @@ public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
         return getRestoreCost(first);
     }
 
-    private static Item getRepairIngot(ItemStack stack) {
-        String id = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
-        if (id.startsWith("netherite_")) return Items.NETHERITE_INGOT;
-        if (id.startsWith("diamond_")) return Items.DIAMOND;
-        if (id.startsWith("golden_")) return Items.GOLD_INGOT;
-        if (id.startsWith("iron_") || id.startsWith("chainmail_")) return Items.IRON_INGOT;
-        if (id.startsWith("copper_")) return Items.COPPER_INGOT;
-        if (id.startsWith("leather_")) return Items.LEATHER;
-        if (id.startsWith("wooden_")) return Items.OAK_PLANKS;
-        if (id.startsWith("stone_")) return Items.COBBLESTONE;
-        return Items.IRON_INGOT;
-    }
-
     private static int getRestoreCost(ItemStack stack) {
         String id = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
         if (id.startsWith("netherite_")) return 10;
@@ -140,16 +125,14 @@ public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
         return units;
     }
 
-    private boolean tryRename(ItemStack first, ItemStack result) {
-        if (this.itemName != null && !this.itemName.isBlank()) {
-            if (this.itemName.equals(first.getHoverName().getString())) return false;
-            result.set(DataComponents.CUSTOM_NAME, Component.literal(this.itemName));
-            return true;
+    private void tryRename(ItemStack first, ItemStack result) {
+        if (this.itemName == null || this.itemName.isBlank()) {
+            result.remove(DataComponents.CUSTOM_NAME);
+            return;
         }
-
-        if (!first.has(DataComponents.CUSTOM_NAME)) return false;
-        result.remove(DataComponents.CUSTOM_NAME);
-        return true;
+        if (!this.itemName.equals(first.getHoverName().getString())) {
+            result.set(DataComponents.CUSTOM_NAME, Component.literal(this.itemName));
+        }
     }
 
     private void clearOutput(CallbackInfo ci) {

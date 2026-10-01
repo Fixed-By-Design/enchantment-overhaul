@@ -278,7 +278,6 @@ public class CatalogueScreenHandler extends AbstractContainerMenu {
     public int getNormalBookshelves() { return normalBookshelves; }
 
     public boolean isXpCostEnabled() { return xpCostEnabled; }
-    public Set<Identifier> getUnlockedIds() { return unlockedIds; }
 
     public void setSelection(int index, int level) {
         this.selectedIndex = index;

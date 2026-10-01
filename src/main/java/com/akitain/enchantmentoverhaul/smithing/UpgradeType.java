@@ -38,20 +38,12 @@ public enum UpgradeType {
         this.component = component;
     }
 
-    public DataComponentType<Integer> component() {
-        return component;
-    }
-
     public MutableComponent getDescription() {
         return Component.translatable("upgrade." + EnchantmentOverhaul.MOD_ID + "." + name().toLowerCase(Locale.ROOT));
     }
 
     public MutableComponent getFullname(int level) {
         return getDescription().append(CommonComponents.SPACE).append(Component.translatable("enchantment.level." + level));
-    }
-
-    public boolean appliesTo(ItemStack stack) {
-        return appliesTo(stack, null);
     }
 
     // Eligibility is data-driven: add items to the matching enchantment-overhaul:upgradeable tag.

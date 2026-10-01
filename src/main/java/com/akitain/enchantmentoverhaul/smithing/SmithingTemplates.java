@@ -86,23 +86,12 @@ public class SmithingTemplates {
             Items.NETHERITE_INGOT, 5
     );
 
-    private static final int[] XP_COSTS = {0, 1, 3, 5, 8, 12};
-
     public static UpgradeType getType(Item template) {
         return TEMPLATE_TO_TYPE.get(template);
     }
 
     public static int getMaterialLevel(Item material) {
         return MATERIAL_TO_LEVEL.getOrDefault(material, 0);
-    }
-
-    public static int getXpCost(int level) {
-        if (level < 1 || level > 5) return 0;
-        return XP_COSTS[level];
-    }
-
-    public static boolean isTemplate(Item item) {
-        return TEMPLATE_TO_TYPE.containsKey(item);
     }
 
     private static Item register(String name, Component appliesTo, Component ingredients,
