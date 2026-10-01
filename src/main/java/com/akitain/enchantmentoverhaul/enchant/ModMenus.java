@@ -6,12 +6,14 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 
-public class ModMenus {
+public final class ModMenus {
 
-    public static final ExtendedMenuType<CatalogueMenu, CatalogueData> CATALOGUE =
-            new ExtendedMenuType<>(CatalogueMenu::fromData, CatalogueData.PACKET_CODEC);
+    public static final ExtendedMenuType<CatalogueMenu, CatalogueData> CATALOGUE = Registry.register(
+            BuiltInRegistries.MENU,
+            Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "catalogue"),
+            new ExtendedMenuType<>(CatalogueMenu::new, CatalogueData.STREAM_CODEC));
 
-    public static void register() {
-        Registry.register(BuiltInRegistries.MENU, Identifier.fromNamespaceAndPath(EnchantmentOverhaul.MOD_ID, "catalogue"), CATALOGUE);
-    }
+    private ModMenus() {}
+
+    public static void bootstrap() {}
 }

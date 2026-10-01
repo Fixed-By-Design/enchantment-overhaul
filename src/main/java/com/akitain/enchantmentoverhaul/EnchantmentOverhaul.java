@@ -21,7 +21,7 @@ public class EnchantmentOverhaul implements ModInitializer {
     @Override
     public void onInitialize() {
         ModComponents.register();
-        ModMenus.register();
+        ModMenus.bootstrap();
         SmithingTemplates.register();
         ModGameRules.register();
         UpgradeCommand.register();

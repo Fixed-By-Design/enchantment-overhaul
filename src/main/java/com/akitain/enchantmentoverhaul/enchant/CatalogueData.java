@@ -1,18 +1,21 @@
 package com.akitain.enchantmentoverhaul.enchant;
 
-import java.util.List;
-import net.minecraft.network.RegistryFriendlyByteBuf;
+import io.netty.buffer.ByteBuf;
+import java.util.HashSet;
+import java.util.Set;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.enchantment.Enchantment;
 
-public record CatalogueData(List<Identifier> unlocked, int normalBookshelves, boolean xpCostEnabled) {
+public record CatalogueData(Set<ResourceKey<Enchantment>> unlocked, int bookshelves, boolean xpCostEnabled) {
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, CatalogueData> PACKET_CODEC = StreamCodec.composite(
-            Identifier.STREAM_CODEC.apply(ByteBufCodecs.list()),
+    public static final StreamCodec<ByteBuf, CatalogueData> STREAM_CODEC = StreamCodec.composite(
+            ResourceKey.streamCodec(Registries.ENCHANTMENT).apply(ByteBufCodecs.collection(HashSet::new)),
             CatalogueData::unlocked,
             ByteBufCodecs.VAR_INT,
-            CatalogueData::normalBookshelves,
+            CatalogueData::bookshelves,
             ByteBufCodecs.BOOL,
             CatalogueData::xpCostEnabled,
             CatalogueData::new
