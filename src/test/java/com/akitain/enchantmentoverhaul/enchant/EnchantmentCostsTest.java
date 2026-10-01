@@ -62,14 +62,15 @@ class EnchantmentCostsTest {
     @Test
     void reagentSlotAcceptsNewMaterialsAndLapisFallback() {
         for (var item : new net.minecraft.world.item.Item[] {
-                Items.GHAST_TEAR, Items.ENDER_PEARL, Items.AMETHYST_SHARD,
-                Items.PRISMARINE_CRYSTALS, Items.REDSTONE, Items.IRON_INGOT,
-                Items.COBWEB, Items.LAPIS_LAZULI}) {
+                Items.GHAST_TEAR, Items.RABBIT_FOOT, Items.SPECTRAL_ARROW, Items.SCULK_SENSOR,
+                Items.WIND_CHARGE, Items.LEAD, Items.PRISMARINE_CRYSTALS, Items.REDSTONE,
+                Items.IRON_INGOT, Items.COBWEB, Items.LAPIS_LAZULI}) {
             assertTrue(EnchantmentCosts.isReagent(item), item.toString());
         }
         assertFalse(EnchantmentCosts.isReagent(Items.HEART_OF_THE_SEA));
         assertFalse(EnchantmentCosts.isReagent(Items.ECHO_SHARD));
-        assertFalse(EnchantmentCosts.isReagent(Items.SPECTRAL_ARROW));
+        assertFalse(EnchantmentCosts.isReagent(Items.ENDER_PEARL));
+        assertFalse(EnchantmentCosts.isReagent(Items.AMETHYST_SHARD));
         assertFalse(EnchantmentCosts.isReagent(Items.STRING));
     }
 

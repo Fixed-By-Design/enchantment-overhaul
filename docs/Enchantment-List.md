@@ -70,7 +70,7 @@ These are replaced by the [[Smithing Table]] or [[Innate Material Properties]] s
 
 ## Reagent Table
 
-Each enchantment requires a specific reagent alongside XP. Costs now depend on the enchantment rather than only its level. Normal bookshelves reduce these costs by up to 50%; the final quantity is rounded up.
+Each enchantment requires a reagent tied to its theme alongside XP. Stronger enchantments ask for rarer reagents or larger amounts: Mending takes Ghast Tears, Swift Sneak takes Sculk Sensors and Lunge takes Wind Charges, while Knockback only takes Pistons. Normal bookshelves reduce these costs by up to 50%; the final quantity is rounded up.
 
 Values separated by `/` are **cumulative costs from an unenchanted item** for levels I / II / III / IV. Upgrades pay only the difference between the rounded costs of the target and current levels, using the same bookshelf count.
 
@@ -78,29 +78,29 @@ Values separated by `/` are **cumulative costs from an unenchanted item** for le
 |---|---|---|---|
 | Fire Aspect | Blaze Powder | 4 / 8 | 2 / 4 |
 | Flame | Blaze Powder | 4 | 2 |
-| Channeling | Lightning Rod | 2 | 1 |
+| Channeling | Lightning Rod | 4 | 2 |
 | Frost Walker | Packed Ice | 4 / 8 | 2 / 4 |
 | Thorns | Cactus | 8 / 16 / 24 | 4 / 8 / 12 |
 | Fortune | Emerald | 8 / 20 / 36 | 4 / 10 / 18 |
-| Looting | Ender Pearl | 4 / 8 / 12 | 2 / 4 / 6 |
+| Looting | Rabbit Foot | 4 / 8 / 12 | 2 / 4 / 6 |
 | Silk Touch | Cobweb | 2 | 1 |
 | Luck Of The Sea | Nautilus Shell | 2 / 4 / 6 | 1 / 2 / 3 |
-| Infinity | Amethyst Shard | 16 | 8 |
+| Infinity | Spectral Arrow | 16 | 8 |
 | Depth Strider | Prismarine Shard | 4 / 8 / 12 | 2 / 4 / 6 |
 | Soul Speed | Soul Sand | 4 / 8 / 12 | 2 / 4 / 6 |
-| Swift Sneak | Amethyst Shard | 8 / 16 / 24 | 4 / 8 / 12 |
+| Swift Sneak | Sculk Sensor | 4 / 8 / 12 | 2 / 4 / 6 |
 | Riptide | Prismarine Crystals | 4 / 8 / 12 | 2 / 4 / 6 |
-| Loyalty | Iron Chain | 2 / 4 / 6 | 1 / 2 / 3 |
+| Loyalty | Lead | 2 / 4 / 6 | 1 / 2 / 3 |
 | Multishot | Firework Rocket | 4 | 2 |
 | Piercing | Arrow | 8 / 16 / 24 / 32 | 4 / 8 / 12 / 16 |
 | Wind Burst | Breeze Rod | 2 / 4 / 6 | 1 / 2 / 3 |
 | Respiration | Pufferfish | 2 / 4 / 6 | 1 / 2 / 3 |
 | Aqua Affinity | Prismarine Crystals | 2 | 1 |
-| Sweeping Edge | Iron Ingot | 2 / 4 / 6 | 1 / 2 / 3 |
+| Sweeping Edge | Iron Ingot | 4 / 8 / 12 | 2 / 4 / 6 |
 | Breach | Breeze Rod | 2 / 4 / 6 / 8 | 1 / 2 / 3 / 4 |
 | Knockback | Piston | 2 / 4 | 1 / 2 |
 | Punch | Snowball | 4 / 8 | 2 / 4 |
-| Lunge | Slime Ball | 4 / 8 / 12 | 2 / 4 / 6 |
+| Lunge | Wind Charge | 4 / 8 / 12 | 2 / 4 / 6 |
 | Feather Falling | Feather | 4 / 8 / 12 / 16 | 2 / 4 / 6 / 8 |
 | Quick Charge | Redstone | 4 / 8 / 12 | 2 / 4 / 6 |
 | Lure | Tropical Fish | 2 / 4 / 6 | 1 / 2 / 3 |
@@ -112,10 +112,10 @@ Values separated by `/` are **cumulative costs from an unenchanted item** for le
 | Last Stand | Golden Apple | 2 / 4 / 6 | 1 / 2 / 3 |
 | Curse of Fragility | Glass Pane | 2 | 1 |
 | Curse of Hunger | Rotten Flesh | 2 | 1 |
-| Veil | Fermented Spider Eye | 4 | 2 |
+| Veil | Fermented Spider Eye | 8 | 4 |
 | Burnishing | Honeycomb | 4 | 2 |
 | Wraith | Phantom Membrane | 2 | 1 |
-| Parry | Iron Bars | 2 | 1 |
+| Parry | Iron Bars | 4 | 2 |
 
 Mending still costs eight XP levels and three enchantment slots. Silk Touch keeps its cobweb reagent and its original price. Existing enchanted items are not changed; the new costs apply to future enchanting and upgrades.
 
