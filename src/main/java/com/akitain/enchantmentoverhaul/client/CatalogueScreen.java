@@ -1,6 +1,7 @@
 package com.akitain.enchantmentoverhaul.client;
 
 import com.akitain.enchantmentoverhaul.EnchantmentOverhaul;
+import com.akitain.enchantmentoverhaul.enchant.BookshelfScanner;
 import com.akitain.enchantmentoverhaul.enchant.CatalogueScreenHandler;
 import com.akitain.enchantmentoverhaul.enchant.CatalogueScreenHandler.CatalogueEntry;
 import com.akitain.enchantmentoverhaul.enchant.EnchantmentCosts;
@@ -110,8 +111,6 @@ public class CatalogueScreen extends AbstractContainerScreen<CatalogueScreenHand
 
     public CatalogueScreen(CatalogueScreenHandler handler, Inventory inventory, Component title) {
         super(handler, inventory, title, BG_W, BG_H);
-        this.titleLabelX = 8;
-        this.titleLabelY = 6;
         this.inventoryLabelX = 7;
         this.inventoryLabelY = 110;
         for (int i = 0; i < sgaRows.length; i++) sgaRows[i] = randomSga(18);
@@ -129,7 +128,6 @@ public class CatalogueScreen extends AbstractContainerScreen<CatalogueScreenHand
     public void extractRenderState(GuiGraphicsExtractor gfx, int mouseX, int mouseY, float deltaTicks) {
         checkItemChanged();
         super.extractRenderState(gfx, mouseX, mouseY, deltaTicks);
-        gfx.text(font, this.title, this.leftPos + titleLabelX, this.topPos + titleLabelY, 0xFF404040, false);
         drawCatalogueTooltip(gfx, mouseX, mouseY);
     }
 
@@ -154,11 +152,6 @@ public class CatalogueScreen extends AbstractContainerScreen<CatalogueScreenHand
         drawSlotBar(gfx, x, y);
 
         super.extractContents(gfx, mouseX, mouseY, deltaTicks);
-    }
-
-    @Override
-    protected void extractLabels(GuiGraphicsExtractor gfx, int mouseX, int mouseY) {
-        gfx.text(font, this.playerInventoryTitle, inventoryLabelX, inventoryLabelY, 0x404040, false);
     }
 
     private void drawBook(GuiGraphicsExtractor gfx, int x, int y) {
@@ -346,8 +339,7 @@ public class CatalogueScreen extends AbstractContainerScreen<CatalogueScreenHand
         }
 
         if (menu.getNormalBookshelves() > 0) {
-            int pct = (int) (EnchantmentCosts.baseReagentCost(level) > 0
-                    ? (1.0 - (double) reagentCost / EnchantmentCosts.baseReagentCost(level)) * 100 : 0);
+            long pct = Math.round(BookshelfScanner.reagentDiscount(menu.getNormalBookshelves()) * 100);
             tooltip.add(Component.empty());
             tooltip.add(Component.translatable("screen.enchantment-overhaul.catalogue.bookshelves",
                             menu.getNormalBookshelves(), pct)
