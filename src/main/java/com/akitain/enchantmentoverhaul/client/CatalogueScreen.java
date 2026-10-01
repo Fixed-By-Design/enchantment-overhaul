@@ -15,7 +15,9 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -54,6 +56,9 @@ public class CatalogueScreen extends AbstractContainerScreen<CatalogueScreenHand
     private static final int SLOT_BAR_Y = 104;
 
     private static final int TEXT_LIGHT = 0xFFD8C8F0;
+
+    private static final Component INSERT_ITEM = Component.translatable("screen.enchantment-overhaul.catalogue.insert_item");
+    private static final Component NO_ENCHANTMENTS = Component.translatable("screen.enchantment-overhaul.catalogue.no_enchantments");
 
     private static final Identifier SLOT_SWORD = Identifier.withDefaultNamespace("container/slot/sword");
     private static final Identifier SLOT_AMETHYST = Identifier.withDefaultNamespace("container/slot/amethyst_shard");
@@ -176,10 +181,8 @@ public class CatalogueScreen extends AbstractContainerScreen<CatalogueScreenHand
 
         List<CatalogueEntry> entries = menu.getEntries();
         if (entries.isEmpty()) {
-            String hint = menu.getSlot(0).getItem().isEmpty()
-                    ? "Insert item"
-                    : "Unlock enchantments with bookshelves";
-            List<net.minecraft.util.FormattedCharSequence> lines = font.split(Component.literal(hint), CAT_W - 8);
+            Component hint = menu.getSlot(0).getItem().isEmpty() ? INSERT_ITEM : NO_ENCHANTMENTS;
+            List<net.minecraft.util.FormattedCharSequence> lines = font.split(hint, CAT_W - 8);
             int totalH = lines.size() * (font.lineHeight + 2);
             int startY = cy + (CAT_H - totalH) / 2;
             for (int i = 0; i < lines.size(); i++) {
@@ -277,7 +280,7 @@ public class CatalogueScreen extends AbstractContainerScreen<CatalogueScreenHand
             int lvY = ry + (ROW_H - LV_BTN) / 2;
             gfx.blit(RenderPipelines.GUI_TEXTURED, lvTexture, lvX, lvY, 0, 0, LV_BTN, LV_BTN, LV_BTN, LV_BTN);
 
-            String r = toRoman(lv);
+            Component r = levelName(lv);
             int tw = font.width(r);
             gfx.text(font, r, lvX + (LV_BTN - tw) / 2, lvY + 3, lvColor, true);
             lvX += LV_BTN + LV_GAP;
@@ -322,12 +325,11 @@ public class CatalogueScreen extends AbstractContainerScreen<CatalogueScreenHand
         boolean hasXp = playerXp >= xpCost;
         boolean hasSlots = SlotSystem.getAvailableSlots(item) >= slotCost;
 
-        String levelLabel = entry.currentLevel() > 0
-                ? " " + toRoman(entry.currentLevel()) + " → " + toRoman(level)
-                : " " + toRoman(level);
+        MutableComponent name = entry.entry().value().description().copy().append(CommonComponents.SPACE);
+        if (entry.currentLevel() > 0) name.append(levelName(entry.currentLevel())).append(" → ");
+        name.append(levelName(level));
         List<Component> tooltip = new ArrayList<>();
-        tooltip.add(Component.literal(entry.entry().value().description().getString() + levelLabel)
-                .withStyle(entry.entry().is(EnchantmentTags.CURSE) ? ChatFormatting.RED : ChatFormatting.LIGHT_PURPLE));
+        tooltip.add(name.withStyle(entry.entry().is(EnchantmentTags.CURSE) ? ChatFormatting.RED : ChatFormatting.LIGHT_PURPLE));
         tooltip.add(Component.empty());
         tooltip.add(costLine(new ItemStack(reagentItem).getHoverName(), reagentCost, hasReagent));
         if (menu.isXpCostEnabled()) tooltip.add(costLine(label("xp_levels"), xpCost, hasXp));
@@ -511,14 +513,7 @@ public class CatalogueScreen extends AbstractContainerScreen<CatalogueScreenHand
         return sb.toString();
     }
 
-    private static String toRoman(int n) {
-        return switch (n) {
-            case 1 -> "I";
-            case 2 -> "II";
-            case 3 -> "III";
-            case 4 -> "IV";
-            case 5 -> "V";
-            default -> String.valueOf(n);
-        };
+    private static Component levelName(int level) {
+        return Component.translatable("enchantment.level." + level);
     }
 }

@@ -8,6 +8,9 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -20,6 +23,8 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Locale;
 
 public enum UpgradeType {
     HONING(ModComponents.HONING_LEVEL),
@@ -35,6 +40,14 @@ public enum UpgradeType {
 
     public DataComponentType<Integer> component() {
         return component;
+    }
+
+    public MutableComponent getDescription() {
+        return Component.translatable("upgrade." + EnchantmentOverhaul.MOD_ID + "." + name().toLowerCase(Locale.ROOT));
+    }
+
+    public MutableComponent getFullname(int level) {
+        return getDescription().append(CommonComponents.SPACE).append(Component.translatable("enchantment.level." + level));
     }
 
     public boolean appliesTo(ItemStack stack) {

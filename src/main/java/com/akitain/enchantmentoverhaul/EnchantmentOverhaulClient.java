@@ -28,15 +28,10 @@ public class EnchantmentOverhaulClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(ChiseledBookshelfHoverState::tick);
     }
 
-    private static final String[] ROMAN = {"", "I", "II", "III", "IV", "V"};
-
     private static void addUpgradeLines(ItemStack stack, java.util.List<Component> lines) {
         for (UpgradeType type : UpgradeType.values()) {
             int level = type.currentLevel(stack);
-            if (level <= 0) continue;
-            String name = type.name().charAt(0) + type.name().substring(1).toLowerCase();
-            String roman = level >= 1 && level <= 5 ? ROMAN[level] : String.valueOf(level);
-            lines.add(Component.literal(name + " " + roman).withStyle(ChatFormatting.BLUE));
+            if (level > 0) lines.add(type.getFullname(level).withStyle(ChatFormatting.BLUE));
         }
     }
 
@@ -44,9 +39,10 @@ public class EnchantmentOverhaulClient implements ClientModInitializer {
         if (!stack.is(net.minecraft.tags.ItemTags.ARMOR_ENCHANTABLE)) return;
         String material = InnateMaterialProperties.getMaterial(stack);
         if (material == null) return;
-        String name = InnateMaterialProperties.getResistanceName(material);
+        Component name = InnateMaterialProperties.getResistanceName(material);
         if (name == null) return;
-        lines.add(Component.literal(name + " (5% per piece)").withStyle(ChatFormatting.DARK_AQUA));
+        lines.add(Component.translatable("item.enchantment-overhaul.innate_resistance", name, InnateMaterialProperties.PERCENT_PER_PIECE)
+                .withStyle(ChatFormatting.DARK_AQUA));
     }
 
     private static void addEnchantedBookSubtitle(ItemStack stack, java.util.List<Component> lines) {

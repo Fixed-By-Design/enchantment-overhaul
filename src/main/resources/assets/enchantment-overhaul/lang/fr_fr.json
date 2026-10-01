@@ -63,5 +63,21 @@
   "gamerule.enchantment-overhaul.honing_on_axes": "Autoriser l'Affûtage sur les haches",
   "gamerule.enchantment-overhaul.enchanting_xp_cost": "L'enchantement coûte des niveaux d'XP",
   "enchantment.enchantment-overhaul.parry": "Parade",
-  "enchantment.enchantment-overhaul.parry.desc": "Bloquez juste au moment de l'impact pour repousser l'attaquant sans perdre de durabilité."
+  "enchantment.enchantment-overhaul.parry.desc": "Bloquez juste au moment de l'impact pour repousser l'attaquant sans perdre de durabilité.",
+  "upgrade.enchantment-overhaul.honing": "Affûtage",
+  "upgrade.enchantment-overhaul.warding": "Blindage",
+  "upgrade.enchantment-overhaul.tempering": "Trempe",
+  "upgrade.enchantment-overhaul.grinding": "Meulage",
+  "innate_resistance.enchantment-overhaul.fire": "Résistance au feu",
+  "innate_resistance.enchantment-overhaul.explosion": "Résistance aux explosions",
+  "innate_resistance.enchantment-overhaul.poison": "Résistance au poison",
+  "innate_resistance.enchantment-overhaul.projectile": "Résistance aux projectiles",
+  "innate_resistance.enchantment-overhaul.magic": "Résistance à la magie",
+  "innate_resistance.enchantment-overhaul.fall": "Résistance aux chutes",
+  "item.enchantment-overhaul.innate_resistance": "%s (%s %% par pièce)",
+  "screen.enchantment-overhaul.catalogue.insert_item": "Insérez un objet",
+  "screen.enchantment-overhaul.catalogue.no_enchantments": "Débloquez des enchantements avec des bibliothèques",
+  "commands.enchantment-overhaul.upgrade.success": "Amélioration appliquée à l'objet tenu : %s",
+  "commands.enchantment-overhaul.upgrade.failed.itemless": "Tenez un objet pour l'améliorer",
+  "commands.enchantment-overhaul.upgrade.failed.incompatible": "Impossible d'appliquer %s à cet objet"
 }

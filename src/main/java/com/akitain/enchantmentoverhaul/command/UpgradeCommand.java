@@ -2,13 +2,14 @@ package com.akitain.enchantmentoverhaul.command;
 
 import com.akitain.enchantmentoverhaul.smithing.UpgradeType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.Locale;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -16,6 +17,10 @@ import static net.minecraft.commands.Commands.literal;
 public class UpgradeCommand {
 
     private static final int MAX_LEVEL = 5;
+    private static final SimpleCommandExceptionType ERROR_NO_ITEM = new SimpleCommandExceptionType(
+            Component.translatable("commands.enchantment-overhaul.upgrade.failed.itemless"));
+    private static final DynamicCommandExceptionType ERROR_INCOMPATIBLE = new DynamicCommandExceptionType(
+            upgrade -> Component.translatable("commands.enchantment-overhaul.upgrade.failed.incompatible", upgrade));
 
     public static void register() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
@@ -35,41 +40,13 @@ public class UpgradeCommand {
                                         .executes(context -> apply(context.getSource(), UpgradeType.GRINDING, IntegerArgumentType.getInteger(context, "level")))))));
     }
 
-    private static int apply(CommandSourceStack source, UpgradeType type, int level) {
-        if (source.getPlayer() == null) {
-            source.sendFailure(Component.literal("This command can only be used by a player."));
-            return 0;
-        }
-
-        ItemStack stack = source.getPlayer().getMainHandItem();
-        if (stack.isEmpty()) {
-            source.sendFailure(Component.literal("Hold an item before using /upgrade."));
-            return 0;
-        }
-
-        if (!type.appliesTo(stack, source.getLevel())) {
-            source.sendFailure(Component.literal(typeName(type) + " cannot be applied to this item."));
-            return 0;
-        }
+    private static int apply(CommandSourceStack source, UpgradeType type, int level) throws CommandSyntaxException {
+        ItemStack stack = source.getPlayerOrException().getMainHandItem();
+        if (stack.isEmpty()) throw ERROR_NO_ITEM.create();
+        if (!type.appliesTo(stack, source.getLevel())) throw ERROR_INCOMPATIBLE.create(type.getDescription());
 
         type.applyTo(stack, level);
-        source.sendSuccess(() -> Component.literal("Applied " + typeName(type) + " " + roman(level) + " to held item."), true);
+        source.sendSuccess(() -> Component.translatable("commands.enchantment-overhaul.upgrade.success", type.getFullname(level)), true);
         return 1;
-    }
-
-    private static String typeName(UpgradeType type) {
-        String lower = type.name().toLowerCase(Locale.ROOT);
-        return Character.toUpperCase(lower.charAt(0)) + lower.substring(1);
-    }
-
-    private static String roman(int level) {
-        return switch (level) {
-            case 1 -> "I";
-            case 2 -> "II";
-            case 3 -> "III";
-            case 4 -> "IV";
-            case 5 -> "V";
-            default -> String.valueOf(level);
-        };
     }
 }
