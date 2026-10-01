@@ -4,6 +4,7 @@ import com.akitain.enchantmentoverhaul.command.UpgradeCommand;
 import com.akitain.enchantmentoverhaul.component.ModComponents;
 import com.akitain.enchantmentoverhaul.enchant.ModMenus;
 import com.akitain.enchantmentoverhaul.gamerule.ModGameRules;
+import com.akitain.enchantmentoverhaul.item.RepairableItems;
 import com.akitain.enchantmentoverhaul.loot.LootTableModifier;
 import com.akitain.enchantmentoverhaul.smithing.SmithingTemplates;
 import net.fabricmc.api.ModInitializer;
@@ -18,6 +19,7 @@ public class EnchantmentOverhaul implements ModInitializer {
         ModGameRules.bootstrap();
         ModMenus.bootstrap();
         SmithingTemplates.bootstrap();
+        RepairableItems.bootstrap();
         UpgradeCommand.register();
         LootTableModifier.register();
     }

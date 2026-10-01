@@ -32,6 +32,7 @@ Repair Materials:
 | Leather | Leather |
 | Wood | Oak Planks |
 | Stone | Cobblestone |
+| Bow | String |
 
 Restoration XP Cost:
 
