@@ -15,6 +15,7 @@ Each enchantable item has a max slot count determined by the material. Each ench
 | Iron / Chainmail | 4 | Mending (3) + Fortune I (1) |
 | Diamond | 5 | Mending (3) + Fortune II (2) |
 | Netherite | 5 | Same as Diamond |
+| Rose Gold (Additional Additions) | 5 | Same as Diamond |
 | Gold | 6 | Fortune III (3) + Thorns III (3) |
 
 Gold has 6 slots and the lowest protection. By design, gold rewards players who sacrifice defense for magical options.
