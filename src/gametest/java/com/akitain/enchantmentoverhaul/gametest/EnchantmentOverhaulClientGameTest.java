@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
+import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
 import net.minecraft.client.Minecraft;
@@ -27,6 +28,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -85,6 +87,7 @@ public class EnchantmentOverhaulClientGameTest implements FabricClientGameTest {
             equipmentEffectsApply(scene);
             anvilRepairsWithMaterials(scene);
             grindstoneKeepsSlots(scene);
+            roseGoldGetsDiamondSlots(scene);
             smithingTableUpgrades(scene);
         }
     }
@@ -314,6 +317,17 @@ public class EnchantmentOverhaulClientGameTest implements FabricClientGameTest {
             check(!sword.has(ModComponents.GRINDSTONE_PENALTY), "the grindstone should not cost a slot");
             check(SlotSystem.getMaxSlots(withComponent(Items.DIAMOND_PICKAXE, ModComponents.GRINDSTONE_PENALTY, 2)) == 5,
                     "items penalized by older versions should get their slots back");
+            return null;
+        });
+    }
+
+    private static void roseGoldGetsDiamondSlots(Scene scene) {
+        if (!FabricLoader.getInstance().isModLoaded("additionaladditions")) return;
+        scene.onServer(server -> {
+            for (String piece : List.of("sword", "pickaxe", "spear", "helmet", "boots")) {
+                Item item = BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath("additionaladditions", "rose_gold_" + piece));
+                check(SlotSystem.getBaseMaxSlots(new ItemStack(item)) == 5, "rose gold " + piece + " should get diamond's five slots");
+            }
             return null;
         });
     }

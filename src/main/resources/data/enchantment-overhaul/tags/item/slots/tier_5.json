@@ -24,6 +24,46 @@
     "minecraft:mace",
     "minecraft:diamond_spear",
     "minecraft:netherite_spear",
-    "minecraft:trident"
+    "minecraft:trident",
+    {
+      "id": "additionaladditions:rose_gold_sword",
+      "required": false
+    },
+    {
+      "id": "additionaladditions:rose_gold_pickaxe",
+      "required": false
+    },
+    {
+      "id": "additionaladditions:rose_gold_axe",
+      "required": false
+    },
+    {
+      "id": "additionaladditions:rose_gold_shovel",
+      "required": false
+    },
+    {
+      "id": "additionaladditions:rose_gold_hoe",
+      "required": false
+    },
+    {
+      "id": "additionaladditions:rose_gold_spear",
+      "required": false
+    },
+    {
+      "id": "additionaladditions:rose_gold_helmet",
+      "required": false
+    },
+    {
+      "id": "additionaladditions:rose_gold_chestplate",
+      "required": false
+    },
+    {
+      "id": "additionaladditions:rose_gold_leggings",
+      "required": false
+    },
+    {
+      "id": "additionaladditions:rose_gold_boots",
+      "required": false
+    }
   ]
 }
